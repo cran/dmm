@@ -1,0 +1,41 @@
+# functions
+export(
+  dmm,
+  mdf,
+  make.ctable,
+  warcolak.convert, 
+  pedrenum,
+  pedcheck,
+  gprint,
+  gresponse,
+  gsummary
+#  gprint.dmm,
+#  gresponse.dmm,
+#  gsummary.dmm,
+#  summary.dmm,
+#  print.dmm,
+#  print.summary.dmm,
+#  print.gresponse.dmm,
+#  print.gsummary.dmm
+#  dmm.default
+)
+
+exportClasses(dmm)
+
+# data
+# export(dt8bal.df,harv103.df,merino.df,quercus.df,sheep.df,tstmo1.df)
+
+# S3 methods
+S3method(print,dmm)
+S3method(print,summary.dmm)
+S3method(print,gsummary.dmm)
+S3method(print,gresponse.dmm)
+S3method(summary,dmm)
+S3method(gsummary,dmm)
+S3method(gresponse,dmm)
+S3method(gprint,dmm)
+S3method(dmm,default)
+
+# import dependencies
+import(MASS,Matrix,nadiv,robustbase,pls)
+
