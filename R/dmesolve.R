@@ -193,7 +193,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
     degfd <- am$n * am$n - am$v
 #
     if(dmekeep) {
-      dme.exp.list <- list(dme.exp=dyad.explist$emat,dme.yyd=evec,dme.mean=dyad.explist$emat.mean,dme.var=dyad.explist$emat.var, dme.correl=dyad.explist$emat.cor)
+      dme.exp.list <- list(dme.wmat=dyad.explist$emat,dme.psi=evec,dme.mean=dyad.explist$emat.mean,dme.var=dyad.explist$emat.var, dme.correl=dyad.explist$emat.cor)
     } 
     else{
       dme.exp.list <- list(dme.mean=dyad.explist$emat.mean,dme.var=dyad.explist$emat.var,dme.correl=dyad.explist$emat.cor)

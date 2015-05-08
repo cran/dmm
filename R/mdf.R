@@ -1,7 +1,7 @@
 mdf <-
-function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = c(1,2), keep=F
+function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = NULL, keep=F
            ,relmat = NULL) {
-#  mdf()  - version 3 of mdf
+#  mdf()  - version 4 of mdf
 #         - remove Id == NA
 #         - remove duplicate Id's - including first dup
 #         - add SId's which dont match Id to base 
@@ -17,7 +17,34 @@ function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = c(1,2
 #     Note:  pedcols and factorcols must be either both numeric ( ie col nos) 
 #                                              or both character ( ie col names)
 #            ycols can be either numeric or character
+#            sexcode should be of the same type as df$Sex
 #
+# check sexcode present
+   if(is.null(sexcode)) {
+     stop("mdf(): sexcode argument must be present.\n")
+   }
+#
+# check sexcode type
+   if(is.character(df$Sex) & is.character(sexcode)){
+     sexcharacter <- T
+   }
+   else if(is.numeric(df$Sex) &  is.numeric(sexcode)){
+     sexcharacter <- F
+   }
+   else if(is.factor(df$Sex)){
+     if(is.character(sexcode)){
+       sexcharacter <- T
+     }
+     else if(is.numeric(sexcode)){
+       sexcharacter <- F
+     }
+     else {
+       stop("mdf(): df$Sex is a factor and sexcode is not either numeric or character.\n")
+     }
+   }
+   else {
+     stop("mdf(): sexcode and df$Sex not the same type.\n")
+   }
 #
    cat("Pedigree Id check:\n")
    cat("No of rows with Id in original dataframe = ",length(df$Id),"\n")
@@ -144,7 +171,12 @@ function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = c(1,2
       ped[,2] <- mdf[,"DId"]
       ped[,3] <- mdf[,"SId"]
       ped2[,1:3] <- ped
-      ped2[,4] <- mdf[,"Sex"]
+      if(sexcharacter) {
+        ped2[,4] <- as.character(mdf[,"Sex"])
+      }
+      else {
+        ped2[,4] <- as.numeric(as.character(mdf[,"Sex"]))
+      }
       dimnames(ped2)[[2]] <- c("ID","Dam","Sire","Sex")
       dimnames(ped)[[2]] <- c("ID","Dam","Sire")
       cat("Make relationship matrices:\n")

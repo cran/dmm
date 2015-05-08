@@ -1,0 +1,6 @@
+dmm_1.5-1	In function mdf() the Sex coding column of the dataframe 'df' is 
+		passed to function makeS() of package 'nadiv' as a factor. This
+		causes problems in makeS(). 
+		Fix: mdf() modified in dmm_1.6-1 to pass either an integer vector
+		or a character vector as the 'sex' column of the 'pedigree' 
+		matrix passed to makeS().

@@ -1,0 +1,3 @@
+dmm_1.6-1	S3 plotting method plot.dmm() added
+                Attributes renamed in dmm object  dme.yyd -> dme.psi
+                                                  dme.eamt -> dme.wmat

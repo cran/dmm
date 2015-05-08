@@ -8,7 +8,7 @@ The function \code{mdf()} converts an R dataframe to one which meets the require
 Conversion involves renumbering pedigree Id's, removing duplicates, adding base animals, setting up columns to be fixed factors, putting multivariate traits into a matrix, defining the heterogametic sex, and optionally calling \code{nadiv} functions to append relationship matrices.
 }
 \usage{
-mdf(df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = c(1, 2),
+mdf(df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = NULL,
     keep = F, relmat = NULL)
 }
 \arguments{
@@ -33,7 +33,7 @@ A vector specifying which columns of \code{df} contain codes for factors which a
 A vector specifying which columns of \code{df} contain observations which are to become traits in a matrix. The default is NULL. The matrix is always called 'Ymat'.
 }
   \item{sexcode}{
-A vector listing the codings used for Sex, with the heterogametic sex code given first position. This is used only if the sex linkage relationship matrix is generated, but should always be specified.
+A vector of length 2 specifying the codings used for Sex, with the heterogametic sex code given first position. This should always be specified. The default is NULL. If the \code{Sex} column in the dataframe \code{df} is a character vector, then \code{sexcode} should be a charcter vector. If the \code{Sex} column in the dataframe \code{df} is an integer vector, then \code{sexcode} should be an integer vector. If the \code{Sex} column in the dataframe \code{df} is a character vector coerced to a factor, then \code{sexcode} should be a charcter vector. If the \code{Sex} column in the dataframe \code{df} is an integer vector coerced to a factor, then \code{sexcode} should be an integer vector.
 }
   \item{keep}{
 A logical variable. Are columns not specified by \code{pedcols}, \code{factorcols}, or \code{ycols} to be retained in the output object? Default is FALSE - ie unused columns are discarded.
@@ -100,7 +100,7 @@ An object of class \code{dataframe} as returned by function \code{mdf()} is a da
 Neville Jackson
 }
 \note{
-Individuals which appear in the SId or DId columns, but not in the Id column are assumed to be 'base individuals', ie they have unknown sire and dam. They will be given an Id and added to the dataframe, but their SId and DId and all data will be set to NA, so they will be assumed unrelated and will not contribute data. It is important that 'base individuals' be present for relationship matrices to be calculated correctly.
+Individuals which appear in the SId or DId columns, but not in the Id column are assumed to be 'base individuals', ie they have unknown sire and dam. They will be given an Id and added to the dataframe, but their SId and DId and all data except for Sex coding will be set to NA, so they will be assumed unrelated and will not contribute data. It is important that 'base individuals' be present for relationship matrices to be calculated correctly.
 }
 
 \seealso{

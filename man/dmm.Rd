@@ -115,11 +115,11 @@ Total number of individuals in the analysis (ie with data)
 \item{degf}{
 Degrees of freedom remaining after fitting fixed effects.
 }
-\item{dme.exp}{
-The dyadic model equations matrix. Present only if dmekeep=TRUE.
+\item{dme.wmat}{
+The dyadic model equations matrix. Present only if dmekeep=TRUE. The name 'wmat' refers to the matrix \eqn{W} in equations 12 and 13 of the document dmmOverview.pdf.
 }
-\item{dme.yyd}{
-The dyadic model equations right hand sides (or traits) matrix. Present only if dmekeep=TRUE.
+\item{dme.psi}{
+The dyadic model equations right hand sides (or traits) matrix. Present only if dmekeep=TRUE. The name 'psi' refers to the matrix \eqn{\Psi} in equations 12 and 13 of the document dmmOverview.pdf.
 }
 \item{dme.fit}{
 The \emph{fit} object from solving dyadic model equations. Its form depends on the \code{dmeopt} argument. For dmeopt="qr" (the default) it just contains the QR transform of the DME's. For dmeopt="lm" it contains the object returned by function \code{lm()} For dmeopt="lmrob" it contains the object returned by function \code{lmrob()} For dmeopt="pcr" it contains the object returned by function \code{mvr()} Present only if dmekeepfit=TRUE.
@@ -196,7 +196,7 @@ Another list containing all the above items, but for fixed effects fitted by GLS
 
 }
 \references{
-The document dmmOverview.pdf has a list of literature references.
+The document dmmOverview.pdf has a bibliography of literature references.
 }
 \author{
 Neville Jackson
@@ -235,32 +235,6 @@ summary(sheep.fit,traitset=c("Cww","Diam"),gls=TRUE)
 # view the genetic parameters
 gsummary(sheep.fit,traitset=c("Cww","Diam"))
 
-\dontrun{
-# to look at residuals need to rerun as follows, to retain the \code{dme.fit} object
-sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,
-              gls=TRUE,dmeopt="lm",dmekeepfit=TRUE)
-# can only plot one traitpair at a time -> use subscripts [,1] for first trait
-plot(fitted(sheep.fit$dme.fit)[,1],resid(sheep.fit9$dme.fit)[,1])
-qqnorm(resid(sheep.fit$dme.fit)[,1])
-hist(resid(sheep.fit$dme.fit)[,1])
-# not much evidence of non normality here
-# these are dyadic model residuals
-# to get residuals from the fixed effect model do
-hist(resid(sheep.fit$aov)[,1])
-qqnorm(resid(sheep.fit$aov)[,1])
-plot(fitted(sheep.fit$aov)[,1],resid(sheep.fit9$aov)[,1])
-# not much non normality here either
-# can get the GLS dyadic model residuals too
-# need to know no of reps^2 = 1296 and no traits^2 = 9
-# in order to get one traitpair out of the multivariate GLS-b dyadic model
-# residuals vector
-residmat <- matrix(resid(sheep.fit9$gls$dme.fit),1296,9)
-hist(residmat[,1])
-qqnorm(residmat[,1])
-# can plot OLS versus GLS residuals
-plot(resid(sheep.fit$dme.fit)[,1],residmat[,1])
-# not a surprise they are correlated
-}
 rm(sheep.df)
 rm(sheep.mdf)
 rm(sheep.fit)
