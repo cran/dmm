@@ -1,3 +1,15 @@
 dmm_1.6-1	S3 plotting method plot.dmm() added
                 Attributes renamed in dmm object  dme.yyd -> dme.psi
                                                   dme.eamt -> dme.wmat
+
+dmm_1.6-2	sheep.df dataset modified to fix pedigree error
+		pedcheck() modified to detect Sex clashes in pedigree
+		dmmOverview.pdf modified to cover mods to sheep.df
+		tstmo1.df dataset sexes corrected to suit new pedcheck()
+		gresponse.dmm() rewritten to include individual additive 
+		sexlinked and maternal additive sexlinked effects.
+		summary.gresponse.dmm() added
+                print.gresponse.dmm() rewritten
+                part.add() added - hidden function 
+		make.dmmobj() added - allows users of gresponse() to make 
+                a dmm object from external data, instead of using a dmm output.

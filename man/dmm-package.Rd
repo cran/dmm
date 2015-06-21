@@ -11,8 +11,8 @@ Dyadic mixed model analysis with multi-trait responses and pedigree-based partit
 \tabular{ll}{
 Package: \tab dmm\cr
 Type: \tab Package\cr
-Version: \tab 1.5\cr
-Date: \tab 2014-09-13\cr
+Version: \tab 1.6-2\cr
+Date: \tab 2015-06-23\cr
 License: \tab GPL-2 \cr
 }
 This package provides tools for setting up and solving dyadic model equations 
@@ -29,7 +29,7 @@ in a quantitative genetic analysis:
 \item cross-effect and cross-trait covariance components
 \item multicollinearities among the components
 \item genetic parameters (ie proportion of variance and correlation) and standard errors for all fitted components
-\item genetic response to phenotypic selection for individual additive and maternal additive cases
+\item genetic response to phenotypic selection for individual additive and maternal additive cases with autosomal and sexlinked components
 \item data preparation tools
 \item S3 methods to organize output
 \item test example datasets
@@ -44,6 +44,8 @@ The main functions in dmm are:
 \item{summary()}{S3 method, reports (co)variance components and standard errors}
 \item{gsummary()}{S3 method, reports genetic parameters and standard errors}
 \item{gresponse()}{S3 method, reports genetic response to selection}
+\item{print()}{S3 method, briefly reports output object from dmm()}
+\item{plot()}{S3 method, plots residuals for dyadic model fit}
 }
 
 There are also some example datasets, some with  'known' answers:
@@ -97,9 +99,11 @@ In the \code{dmm} package
 \item{dmm()}{ for dmm function arguments and return value}
 \item{summary()}{ for fixed coefficients and (co)variance components}
 \item{gsummary()}{ for genetic parameters}
-\item{gpredict()}{ for predicted selection response}
+\item{gresponse()}{ for predicted selection response}
 \item{make.ctable()}{ for comprehensive list of variance components}
 \item{mdf()}{ for data preparation}
+\item{print()}{ for brief print of dmm() output}
+\item{plot()}{ for residual plots for dyadic model}
 }
 Other R packages
 \itemize{

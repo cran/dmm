@@ -29,7 +29,7 @@ Either a dataframe or an object of class \code{mdf} which is a list containing a
 A formula specifying the fixed-effect part of the model and the response variate(s). Response should be a matrix for multi-trait models. Default is \code{Ymat ~ 1} that is a response matrix called \code{Ymat} and a fitted mean effect.
 }
   \item{components}{
-A simple vector specifying each of the components to be partitioned from the residual variation after fitting fixed effects. Residual is assumed to be the level of variation attributed to individuals. The components given here are assumed to sum to phenotypic variance so that if there are cross-effect covariances (eg "CovG(Ia,Ma)" and "CovG(Ma,Ia)") they need to be both present. The default is a simple partitioning into individual environmental ("VarE(I)") and individual additive genetic ("VarG(Ia)") variation. For a full list of available components see \code{make.ctable()} function. The default is \code{components = c("VarE(I)", "VarG(Ia)")}.
+A simple vector specifying each of the components to be partitioned from the residual variation after fitting fixed effects. Residual is assumed to be the level of variation attributed to individuals. The components given here are assumed to sum to phenotypic variance so that if there are cross-effect covariances (eg "CovG(Ia,Ma)" and "CovG(Ma,Ia)") they need to be both present. The default is a simple partitioning into individual environmental ("VarE(I)") and individual additive genetic ("VarG(Ia)") variation. It is necessary to actually specify the individual environmental variance, as it is actually fitted as a parameter in the dyadic model, not obtained from residual variation. For a full list of available components see \code{make.ctable()} function. The default is \code{components = c("VarE(I)", "VarG(Ia)")}. For a brief introduction to the notation for components see Note section below. For a comprehensive definition of notation see 'dmmOverview.pdf' Section 6.
 }
   \item{cohortform}{
 A formula specifying the effects which define cohort grouping of individuals.  For example \code{cohortform = ~ Year}. A cohort is a grouping of individuals experiencing the same external environmental conditions, eg a group of sheep born and reared together, commonly referred to as a drop. Cohort should not contain DId - the dam's Id. If one needs to consider littermates, function \code{dmm()} provides a means of combining maternal environmental and cohort variance components to achieve this. The default is NULL - ie no cohort defined.
@@ -83,7 +83,7 @@ Missing values for either traits or fixed effects are simply omitted by \code{dm
 
 The (co)variance which is partitioned into components is always the residual (co)variance from the fixed effects model. This is assumed to represent the observed variation among individuals. There is, at this stage, no provision for models with more than one error level, so split plot and repeated measures designs are not provided for. There is nothing to stop one formulating the appropriate fixed effects model and doing the \code{aov()} step, but partitioning of any (co)variance other than residual is not at present provided.
 
-The naming conventions for components may seem a little strange. They are designed to be all ASCII and therefore usable by R as rownames or colnames. The function \code{make.ctable()} returns a list of all available components ( as returnobject$all), as well as a spectrum of sublists which are used internally. The available components are fully documented in the pdf file \emph{dmmOverview.pdf}. Most of the names are obvious (eg "VarG(Ia)" means variance-genetic-individual-additive). The term \emph{individual} distinguishes individual or direct genetic or environmental effects from maternal genetic or environmental effects.
+The naming conventions for components may seem a little strange. They are designed to be all ASCII and therefore usable by R as rownames or colnames. The function \code{make.ctable()} returns a list of all available components ( as returnobject$all), as well as a spectrum of sublists which are used internally. The available components are fully documented in the pdf file \emph{dmmOverview.pdf} Section 6. Most of the names are obvious (eg "VarG(Ia)" means variance-genetic-individual-additive). The term \emph{individual} distinguishes individual or direct genetic or environmental effects from maternal genetic or environmental effects.
 
 It is important for the proper estimation of phenotypic (co)variance that any cross-effect covariance components are fitted in symmetric pairs ( for example "CovE(I,M)" and "CovE(M,I)"). For one trait these will be identical, so the covariance will simply enter twice in the sum, as required. However cross-trait-cross-effect covariances will not be identical and the sum, which is a phenotypic covariance, requires that the symmetric pair be present.
 
@@ -204,7 +204,18 @@ Neville Jackson
 \note{
  Two methods of estimating fixed effects are offered by \code{dmm()} - termed OLS-b and GLS-b.
 OLS-b is computationally simple and non-iterative and is the default. Use OLS-b for preliminary runs until the set of components to be estimated from the dyadic model equations is settled. Use GLS-b for the final run. 
-OLS-b leads to MINQUE estimates of the variance components and OLS estimates of the fixed effects. GLS-b leads to ML estimates of the variance components (with degrees of freedom adjusted to remove bias), and GLS estimates of the fixed effects.
+OLS-b leads to MINQUE estimates of the variance components and OLS estimates of the fixed effects. GLS-b leads to bias-corrected-ML estimates of the variance components , and GLS estimates of the fixed effects.
+
+ The notation for (co)variance components was designed to use ASCII characters only so that it could be usable as dimnames in R. Some examples should make it clear
+
+\describe{
+\item{"VarE(Ia)"}{ variance environmental individual additive}
+\item{"VarG(Ia)"}{ variance genetic individual additive}
+\item{"VarG(Ma)"}{ variance genetic maternal additive}
+\item{"CovG(Ia,Ma)"}{ covariance genetic individual additive x maternal additive}
+\item{"VarGs(Ia)"}{ variance genetic sexlinked individual additive} 
+}
+ For a full coverage of notation see the document dmmOverview.pdf Section 6.
 
 }
 
@@ -219,13 +230,13 @@ library(dmm)
 # Prepare the dataset sheep.df
 data(sheep.df)
 sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
-             sexcode=c("M","F"),relmat=c("E","A","D","S.hopi"))
+             sexcode=c("M","F"),relmat=c("E","A","D"))
 # The above code renumbers the pedigree Id's, makes columns "Year","Tb","Sex"
 #    into factors,
 #    assembles columns "CWW",Diam","Bwt" into a matrix (called 'Ymat')
 #    for multivariate processing,
-#    and sets up the environmental, additive genetic, dominance genetic,
-#    and sex linked genetic relationship matrices.
+#    and sets up the environmental, additive genetic, and dominance genetic
+#    relationship matrices.
 
 # a simple model with individual environmenmtal and 
 #    additive genetic components (default)

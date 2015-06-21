@@ -18,7 +18,9 @@ function (mdf,df, k, l, v, x, y, cohortparts, components,relmat,ctable) {
   n <- nrow(y)        # no of individuals with y data and X codes
 
 #  check pedigree in dataframe valid
-  pedcheck(df)
+  if(pedcheck(df) > 0){
+   stop("dmm(): pedigree not valid:\n")
+  }
 
   if(is.null(cohortparts)) {
     cohortcode <- NULL

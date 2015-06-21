@@ -43,8 +43,8 @@ sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
 #    into factors,
 #    assembles columns "CWW",Diam","Bwt" into a matrix (called 'Ymat')
 #    for multivariate processing,
-#    and sets up the environmental, additive genetic, dominance genetic,
-#    and sex linked genetic relationship matrices.
+#    and sets up the environmental, and additive genetic
+#    relationship matrices.
 str(sheep.mdf)
 #cleanup
 rm(sheep.df)

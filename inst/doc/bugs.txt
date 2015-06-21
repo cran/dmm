@@ -4,3 +4,9 @@ dmm_1.5-1	In function mdf() the Sex coding column of the dataframe 'df' is
 		Fix: mdf() modified in dmm_1.6-1 to pass either an integer vector
 		or a character vector as the 'sex' column of the 'pedigree' 
 		matrix passed to makeS().
+
+dmm_1.6-1	In dataset sheep.df row 20 the Id 3a4127 is shown as a male (code "M")
+		and later appears (on line 34) as a DId
+		Fix: row 20 of sheep.df modified -> a female (code "F") in dmm_1.6-2.
+		Note: This fix will affect the results shown for sheep.df analyses in
+		dmmOverview.pdf. The document has been modified to reflect these changes.
