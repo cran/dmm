@@ -1,5 +1,5 @@
-5da319b673624ecabbeec17031f54207 *DESCRIPTION
-1405b9ee9db86d5e3caf8fa355df86b2 *NAMESPACE
+8abf4c2fefd57d7bda00217a412d1264 *DESCRIPTION
+6cdc4ad6b52f21a9b48770ca7c19c047 *NAMESPACE
 ce6653c203043afeacd43dcb8bf536a4 *R/am.arel.R
 7a5e599d8979a0e897ce0de837565b37 *R/am.zandrel.R
 e9233ded8179ead78ab4fc7b8c0ee3ec *R/comtopar.R
@@ -45,7 +45,7 @@ cea5db7213ef6149a899da67a991da60 *R/summary.gresponse.dmm.R
 d383e75737e710c2a9cb8ce06a0c87d0 *R/varlz.R
 725d4b437b1b0fc2a94cecb669314d30 *R/varz.R
 7804fc8c2e2560ccb62d246d087d3bb6 *R/vt.R
-52adb5f0988756f1bb7a069919a924d2 *R/warcolak.convert.R
+64d303aebd4627daf91272edc2c1dab1 *R/warcolak.convert.R
 534a85814c389d9bd465b8fa103ae277 *data/dt8bal.df.rda
 9c672fe60e0b9a9c3263f978b3fd9988 *data/harv101.df.rda
 00fe88a9e655ee42189d79e1bdb6712e *data/merino.df.rda
@@ -53,8 +53,8 @@ d383e75737e710c2a9cb8ce06a0c87d0 *R/varlz.R
 7d05f9b7d87f53205ff784f1439c9fdc *data/sheep.df.rda
 b1d0ac3dd916bdc585b37aa02b5e7da8 *data/tstmo1.df.rda
 2d66b8f07fb93fd800b824e8b06ecd12 *inst/doc/bugs.txt
-87b5deeb5cbd939f7dc2cee311fdfe3e *inst/doc/dmmOverview.pdf
-20187e7d40945755af309886190c9b77 *inst/doc/mods.txt
+3352f19b54925f0531cd697c954166ec *inst/doc/dmmOverview.pdf
+5ac57598e1bd7b9b3083922277ec4206 *inst/doc/mods.txt
 628a64a6fef69e69abb1ddfae69f3a1d *man/dmm-internal.Rd
 b19826bcbc43d1bb20b1744a89d13edb *man/dmm-package.Rd
 8eda81e9cedfd7056c6fe116c1a8eb9d *man/dmm.Rd
@@ -80,4 +80,4 @@ bb1da0b44dfa5f8e785b4f97baf42795 *man/sheep.df.Rd
 952425695e614e67c2bd37600359b802 *man/summary.dmm.Rd
 13c4d5912be597deefa0d21cb4e89bcf *man/summary.gresponse.dmm.Rd
 eacb0711b3fa22e8baec3bfe2f282952 *man/tstmo1.df.Rd
-3e37d7899963be9d64a23e600f251bd2 *man/warcolak.convert.Rd
+2b8a25018feabe8153fcfad7f1842bcb *man/warcolak.convert.Rd

@@ -24,8 +24,15 @@ A dataframe containing the following columns:
 \item{"SId"}{Sire identifier}
 \item{"DId"}{Dam identifier}
 \item{"Sex"}{Coding for sex}
-\item{"Trait1"}{First trait}
-\item{"Trait2"}{Second trait}
+\item{"Trait1"}{First trait phenotypic value}
+\item{"Trait2"}{Second trait phenotypic value}
+\item{"t1_a"}{First trait additive genetic effect}
+\item{"t2_a"}{Second trait additive genetic effect}
+\item{"t2_s"}{Second trait additive genetic sexlinked effect}
+\item{"t1_d"}{First trait dominance genetic effect}
+\item{"t2_d"}{Second trait dominance genetic effect}
+\item{"t1_r"}{First trait environmental effect}
+\item{"t2_r"}{Second trait environmental effect}
 }
 }
 \author{

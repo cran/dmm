@@ -43,3 +43,6 @@ S3method(dmm,default)
 # import dependencies
 import(MASS,Matrix,nadiv,robustbase,pls)
 
+importFrom("graphics", "hist", "mtext", "par")
+importFrom("grDevices", "devAskNewPage")
+importFrom("stats", "aov", "coef", "cor", "fitted", "lm", "qqnorm", "resid", "terms", "var")

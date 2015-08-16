@@ -13,3 +13,8 @@ dmm_1.6-2	sheep.df dataset modified to fix pedigree error
                 part.add() added - hidden function 
 		make.dmmobj() added - allows users of gresponse() to make 
                 a dmm object from external data, instead of using a dmm output.
+
+dmm_1.6-3	warcolak.convert() modified to match nadiv_2.14.0  
+                Section 5.3 rewritten to match nadiv_2.14.0
+		Note added on  sex specific parameters in Sections 5.3 and 9
+		Imported dependencies added to NAMESPACE
