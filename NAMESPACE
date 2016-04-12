@@ -9,7 +9,12 @@ export(
   gprint,
   gresponse,
   gsummary,
-  make.dmmobj
+  make.dmmobj,
+  chartodec,
+  unfactor,
+  condense.dmmarray,
+  condense.dmmblockarray,
+  make.countarray
 #  gprint.dmm,
 #  gresponse.dmm,
 #  gsummary.dmm,

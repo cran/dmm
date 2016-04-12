@@ -18,3 +18,9 @@ dmm_1.6-3	warcolak.convert() modified to match nadiv_2.14.0
                 Section 5.3 rewritten to match nadiv_2.14.0
 		Note added on  sex specific parameters in Sections 5.3 and 9
 		Imported dependencies added to NAMESPACE
+
+dmm_1.6-4	siga.posdef modified to set symmetric=T on calling eigen()
+		dmsolve()  message when fixed effects not of full rank improved
+		varz() fix bug when first arg is NA
+
+dmm_1.7-1	traits pairwise (option dmmarray) and blockwise (option dmmblockarray)

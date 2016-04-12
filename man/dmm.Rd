@@ -14,12 +14,14 @@ effects.
 dmm(mdf, fixform = Ymat ~ 1, components = c("VarE(I)", "VarG(Ia)"),
     cohortform = NULL, posdef = T, gls = F,
     glsopt = list(maxiter = 200, bdamp = 0.8, stoptol = 0.01),
-    dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline", dmekeep = F, dmekeepfit = F)
+    dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline", dmekeep = F,
+    dmekeepfit = F, traitspairwise=F, traitsblockwise=F,\dots)
 
 \S3method{dmm}{default}(mdf, fixform = Ymat ~ 1, components = c("VarE(I)", "VarG(Ia)"),
     cohortform = NULL, posdef = T, gls = F,
     glsopt = list(maxiter = 200, bdamp = 0.8, stoptol = 0.01),
-    dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline", dmekeep = F, dmekeepfit = F)
+    dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline", dmekeep = F,
+    dmekeepfit = F, traitspairwise=F, traitsblockwise=F,\dots)
 }
 \arguments{
   \item{mdf}{
@@ -75,11 +77,24 @@ Logical flag: should the dyadic model equations be returned as part of the \code
   \item{dmekeepfit}{
 Logical flag: should the \emph{fit} object from solving the DME's be returned as part of the \code{dmm()} return object. Default is FALSE. The \emph{fit} object may be large.
 }
+  \item{traitspairwise}{
+Logical flag: should the traits be analysed two at a time in all permutations? Default is FALSE, in which case traits are all analysed simultaneously. This option is useful if traits have different replication. If this option is TRUE \code{dmm()} will return an object of class \code{dmmarray}, being an array of class \code{dmm} objects with the rows and columns named by the trait names. See the  Value section for the structure of an object of class \code{dmmarray}. For this option the dataframe specified as argument \code{mdf} must be made with function \code{mdf()} and must contain the matrix of traits 'Ymat' plus the individual traits as columns (\code{keep=T} option for \code{mdf()}).
+}
+  \item{traitsblockwise}{
+Logical flag: should the traits be analysed in defined blocks of traits in all permutations of pairs of blocks? Default is FALSE. This option is useful if blocks of traits have different replication. If this option is TRUE, the ellipsis option defining blocks must be present. For this option the dataframe specified as argument \code{mdf} must be made with function \code{mdf()} and must contain the matrix of traits 'Ymat' plus the individual traits as columns (\code{keep=T} option for \code{mdf()}).
+}
+  \item{\ldots}{
+Ellipsis argument: if \code{traitsblockwise} is TRUE this argument should contain a number of block definitions of the form 
+
+\code{Block1=c("Trait1","Trait2"),Block2=c("Trait3","Trait4"),\dots}
+
+, specifying the traits to be present in each block. In this case \code{dmm()} will return an object of class \code{dmmblockarray}, being an array of class \code{dmm} objects with the rows and columns named \code{"Block1" and "Block2"}, together with lists of the trait names present in each block. See the Value section for the structure of an object of class \code{dmmblockarray}.
+}
 }
 \details{
 The minimum requirement to use \code{dmm()} directly on a simple dataframe is that it contain columns named "Id", "SId", "DId", and "Sex" plus any fixed effects and traits. The "Id" column must contain identifiers which are unique, numeric, and sequential ( ie they must be numbered 1 to n with unit increments, no duplicates and no gaps). Any fixed effects must be factors, and traits must be numeric. Every "SId" and "DId" code must appear also in the "Id" column even if this results in NA's in every other column. If these requirements are not met, process the dataframe with \code{mdf()} before using \code{dmm()} Also if any relationship matrix other than additive is required, pre-processing with \code{mdf()} is necessary.
 
-Missing values for either traits or fixed effects are simply omitted by \code{dmm()} before any processing. There is an heirarchy of models fitted by \code{dmm()}. There is one fixed model and one dyadic model, for all traits, and only individuals for which all traits are present are included in the model fit steps. In contrast, all individuals are included in the pedigree and in setting up relationship matrices. Hence the number of individuals with data, may be less than the number of individuals in the pedigree.
+Missing values for either traits or fixed effects are simply omitted by \code{dmm()} before any processing. There is an heirarchy of models fitted by \code{dmm()}. There is one fixed model and one dyadic model, for all traits, and only individuals for which all traits are present are included in the model fit steps. In contrast, all individuals are included in the pedigree and in setting up relationship matrices. Hence the number of individuals with data, may be less than the number of individuals in the pedigree. If options \code{traitspairwise} or \code{traitsblockwise} are used both the fixed model and the dyadic model will be the same for all traitpairs (or traitblocks) but the replication may differ, so missing values for some traits  or sets of traits can be handled in this way.
 
 The (co)variance which is partitioned into components is always the residual (co)variance from the fixed effects model. This is assumed to represent the observed variation among individuals. There is, at this stage, no provision for models with more than one error level, so split plot and repeated measures designs are not provided for. There is nothing to stop one formulating the appropriate fixed effects model and doing the \code{aov()} step, but partitioning of any (co)variance other than residual is not at present provided.
 
@@ -90,7 +105,7 @@ It is important for the proper estimation of phenotypic (co)variance that any cr
 In addition to the value returned, \code{dmm()} makes a number of lines of screen output which show each processing step and some minimal model check numbers.
 }
 \value{
-An object of class \code{dmm} is returned. This is basically a list of some or all of the following items:
+An object of class \code{dmm} is returned whenever options \code{traitspairwise} and \code{traitsblockwise} are both FALSE (ie a normal multi-trait analysis). This object is basically a list of some or all of the following items:
 \item{aov}{
 An object of class \code{aov} containing the results of fitting the fixed effects (specified in  argument \code{fixform}) by OLS using a call to the \code{aov()} function
 }
@@ -194,6 +209,11 @@ The call made to \code{dmm()} function to generate this object
 Another list containing all the above items, but for fixed effects fitted by GLS instead of OLS. Will only be present if gls=TRUE and if the gls iteration converged successfully.
 }
 
+If option \code{traitspairwise} is TRUE, the value returned by \code{dmm()} is an object of class \code{dmmarray}, which is an array of which each element is an object of class \code{dmm} representing an analysis for one pair of traits. The rows and columns of the array are named using trait names.
+
+If option \code{traitsblockwise} is TRUE, the value returned by \code{dmm()} is an object of class \code{dmmblockarray}, which is a list of two items named \code{array} and \code{blocks}. List item \code{array} is an array of which each element is an object of class \code{dmm} representing an analysis for one pair of blocks of traits. The rows and columns of the array are named using block names. List item \code{blocks} is a list with one element per block, each containig the set of trait names present in the block.
+
+The functions \code{condense.dmmarray} and \code{condense.dmmblockarray} are available to facilitate recombining an array of \code{dmm} objects into a single object of class \code{dmm} with the variance component and genetic parameter estimates appropriately assembled into multi-trait matrices.  For example, one would use these functions to prepare an input file for function \code{gresponse}.
 }
 \references{
 The document dmmOverview.pdf has a bibliography of literature references.
@@ -221,7 +241,7 @@ OLS-b leads to MINQUE estimates of the variance components and OLS estimates of 
 
 
 \seealso{
-Functions mdf(), make.ctable(). 
+Functions \code{mdf()}, \code{make.ctable()}, \code{condense.dmmarray()}, \code{condense.dmmblockarray()}. 
 Packages nadiv, robustbase, pls
 }
 \examples{

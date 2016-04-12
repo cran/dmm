@@ -7,7 +7,7 @@ function(siga, am, ctable,varopt="both",covopt="bound"){
       if(any(!is.na(match(rownames(siga)[i],ctable$allvar)))){
         # variance - check if pd
          if(varopt == "eigen" || varopt == "both") {
-          eigsiga <- eigen(matrix(siga[i, ], am$l, am$l))
+          eigsiga <- eigen(matrix(siga[i, ], am$l, am$l),symmetric=TRUE)
           neg <- FALSE
           for (j in 1:am$l) {
               if (eigsiga$values[j] <= 0) {

@@ -10,3 +10,5 @@ dmm_1.6-1	In dataset sheep.df row 20 the Id 3a4127 is shown as a male (code "M")
 		Fix: row 20 of sheep.df modified -> a female (code "F") in dmm_1.6-2.
 		Note: This fix will affect the results shown for sheep.df analyses in
 		dmmOverview.pdf. The document has been modified to reflect these changes.
+
+dmm_1.6-4	Error in varz(), fails when first argument is NA, fixed in dmm_1.6-4
