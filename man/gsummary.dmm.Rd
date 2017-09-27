@@ -5,7 +5,7 @@
 Make summary tables of genetic parameters for a dmm object
 }
 \description{
-Extracts the genetic parameters from an object of class \code{dmm}, for the specified set of traits and set of components. Makes tables of parameters ordered either by trait or by component. Tables include parameter estimate, its standard error, and its 95 percent confidence limits.
+Extracts the genetic parameters from an object of class \code{dmm}, for the specified set of traits and set of components. Makes tables of parameters ordered either by trait or by component. Tables include parameter estimate, its standard error, and its 95 percent confidence limits. Parameters are grouped intp class-specific classes, if there are any class-specific components fitted.
 }
 \usage{
 \S3method{gsummary}{dmm}(dmmobj, traitset = "all", componentset = "all", bytrait = T,
@@ -35,7 +35,7 @@ Ellipsis argument.
 }
 }
 \details{
-This is a long printout with  estimates, standard errors and confidence limits, arranged in tables with one estimate per line. It is the analog of \code{summary()} for a \code{dmm} object, but with genetic parameters instead of variance components.
+This is a long printout with  estimates, standard errors and confidence limits, arranged in tables with one estimate per line. It is the analog of \code{csummary()} for a \code{dmm} object, but with genetic parameters instead of variance components. In the case of class-specific parameters, the parameters are listed in class groups, so that the proportions of variance sum to unity within each group. In the case where all parameters are non-specific, there is just one class group.
 }
 \value{
 An object of class \code{gsummary.dmm} which is a list containing the following items:

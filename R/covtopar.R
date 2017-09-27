@@ -11,20 +11,30 @@ function(covg, covt){
     for (j in 1:n) {
         for (i in 1:n) {
             if (i == j) {
-                fract[i] <- covg[i, i]/covt[i, i]
+              fract[i] <- covg[i, i]/covt[i, i]
+              if(!is.na(fract[i])) {
                 if (fract[i] < 0) {
                   fract[i] <- 0
                 }
                 corre[i,i] <- 1
+              }
+              else {
+                corre[i,i] <- 1
+              }
             }
             else if (i != j) {
-                able <- covg[i, i] * covg[j, j]
+              able <- covg[i, i] * covg[j, j]
+              if(!is.na(able)) {
                 if (able > 0) {
                   corre[i, j] <- covg[i, j]/sqrt(able)
                 }
                 else {
                   corre[i, j] <- 0
                 }
+              }  
+              else {
+                corre[i,j] <- NA
+              }
             }
         }
     }

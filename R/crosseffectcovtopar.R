@@ -19,11 +19,16 @@ function(covx, covt, varcomp, var1, var2){
        fract[i] <- covx[i,i]/covt[i,i]
       }
       able <- varcomp[var1,jj] * varcomp[var2,ii]
-      if(able > 0) {
-        corre[i,j] <- covx[i,j]/sqrt(able)
+      if(!is.na(able)) {
+        if(able > 0) {
+          corre[i,j] <- covx[i,j]/sqrt(able)
+        }
+        else {
+          corre[i,j] <- 0
+        }
       }
       else {
-        corre[i,j] <- 0
+        corre[i,j] <- NA
       }
     }
   }

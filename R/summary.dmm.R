@@ -13,7 +13,7 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
   alltraitpairs <- permpaste(dimnames(object$b)[[2]])
  
   if(componentset[1] == "all") {
-    components <- dimnames(object$variance.components)[[1]]
+    components <- dimnames(object$siga)[[1]]
   }
   else {
     components <- componentset
@@ -40,16 +40,17 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
         traitpair <- paste(i,":",j,sep="",collapse=NULL)
         ij <- match(traitpair,alltraitpairs)
         count <- count + 1
-        ci95lo <- object$variance.components[components,ij] - 1.96 * object$variance.components.se[components,ij]
-        ci95hi <- object$variance.components[components,ij] + 1.96 * object$variance.components.se[components,ij]
+        ci95lo <- object$siga[components,ij] - 1.96 * object$sesiga[components,ij]
+        ci95hi <- object$siga[components,ij] + 1.96 * object$sesiga[components,ij]
         ctable <- data.frame(Traitpair=alltraitpairs[ij],
-                     Estimate=object$variance.components[components,ij],
-                     StdErr=object$variance.components.se[components,ij],
-                     CI95lo=ci95lo,CI95hi=ci95hi,row.names=components)
+                   Estimate=object$siga[components,ij],
+                   StdErr=object$sesiga[components,ij],
+                   CI95lo=ci95lo,CI95hi=ci95hi,row.names=components)
         ctables[[count]] <- ctable
       }
     }
-  }
+  }  # end if bytrait
+
   else {  # not bytrait
     btables <- vector("list",length(coefs))  # one table per coefficient
     count <- 0
@@ -68,11 +69,11 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
     count <- 0
     for(i in components) {
        count <- count + 1
-       ci95lo <- object$variance.components[i,traitpairs] - 1.96 * object$variance.components.se[i,traitpairs]
-       ci95hi <- object$variance.components[i,traitpairs] + 1.96 * object$variance.components.se[i,traitpairs]
+       ci95lo <- object$siga[i,traitpairs] - 1.96 * object$sesiga[i,traitpairs]
+       ci95hi <- object$siga[i,traitpairs] + 1.96 * object$sesiga[i,traitpairs]
        ctable <- data.frame(Component=i,
-                    Estimate=object$variance.components[i,traitpairs],
-                    StdErr=object$variance.components.se[i,traitpairs],
+                    Estimate=object$siga[i,traitpairs],
+                    StdErr=object$sesiga[i,traitpairs],
                     CI95lo=ci95lo,CI95hi=ci95hi,row.names=traitpairs)
        ctables[[count]] <- ctable
     }
@@ -100,11 +101,11 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
         traitpair <- paste(i,":",j,sep="",collapse=NULL)
         ij <- match(traitpair,alltraitpairs)
         count <- count + 1
-        ci95lo <- object$gls$variance.components[components,ij] - 1.96 * object$gls$variance.components.se[components,ij]
-        ci95hi <- object$gls$variance.components[components,ij] + 1.96 * object$gls$variance.components.se[components,ij]
+        ci95lo <- object$gls$siga[components,ij] - 1.96 * object$gls$sesiga[components,ij]
+        ci95hi <- object$gls$siga[components,ij] + 1.96 * object$gls$sesiga[components,ij]
         ctable <- data.frame(Traitpair=alltraitpairs[ij],
-                     Estimate=object$gls$variance.components[components,ij],
-                     StdErr=object$gls$variance.components.se[components,ij],
+                     Estimate=object$gls$siga[components,ij],
+                     StdErr=object$gls$sesiga[components,ij],
                      CI95lo=ci95lo,CI95hi=ci95hi,row.names=components)
         gctables[[count]] <- ctable
       }
@@ -128,11 +129,11 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
     count <- 0
     for(i in components) {
        count <- count + 1
-       ci95lo <- object$gls$variance.components[i,traitpairs] - 1.96 * object$gls$variance.components.se[i,traitpairs]
-       ci95hi <- object$gls$variance.components[i,traitpairs] + 1.96 * object$gls$variance.components.se[i,traitpairs]
+       ci95lo <- object$gls$siga[i,traitpairs] - 1.96 * object$gls$sesiga[i,traitpairs]
+       ci95hi <- object$gls$siga[i,traitpairs] + 1.96 * object$gls$sesiga[i,traitpairs]
        ctable <- data.frame(Component=i,
-                    Estimate=object$gls$variance.components[i,traitpairs],
-                    StdErr=object$gls$variance.components.se[i,traitpairs],
+                    Estimate=object$gls$siga[i,traitpairs],
+                    StdErr=object$gls$sesiga[i,traitpairs],
                     CI95lo=ci95lo,CI95hi=ci95hi,row.names=traitpairs)
        gctables[[count]] <- ctable
     }

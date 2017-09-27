@@ -109,7 +109,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
 #       cat("Updated siga:\n")
 #       print(siga)
 #  check updated siga posdef
-          siga <- siga.posdef(siga, am, ctable)
+          siga <- siga.posdef.specific(siga, am, ctable)
 #         cat("Updated siga made positive definite:\n")
 #         print(siga)
 #    look at stopcrit
@@ -252,7 +252,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
       }
 
 #  check final siga posdef
-          siga <- siga.posdef(siga, am, ctable)
+          siga <- siga.posdef.specific(siga, am, ctable)
 #         cat("Final siga made positive definite:\n")
 #         print(siga)
 

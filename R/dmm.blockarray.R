@@ -1,5 +1,5 @@
 dmm.blockarray <-
-function(mdf,fixform,components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit,...)
+function(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit,...)
 #  dmm.blockarray()   - do traits in pairs of blocks of traits
 #                    - return dmmblockarray object
 {
@@ -35,7 +35,7 @@ function(mdf,fixform,components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,re
        else {
          mdf$df$Ymat <- ymat # put local ymat into mdf$df so passed to dmm()
        }
-       fit[[i,j]] <- dmesolve(mdf,fixform,components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit) 
+       fit[[i,j]] <- dmesolve(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit) 
        class(fit[[i,j]]) <- "dmm"
     }
   }

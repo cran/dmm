@@ -1,14 +1,16 @@
 am.zandrel <-
-function (mdf,df, k, l, v, x, y, cohortparts, components,relmat,ctable) {
+function (mdf,df, k, l, x, y, cohortparts, components,specific.components,
+          relmat,ctable) {
   # am.zandrel()
   # construct the animal model matrices z[r],rel[r] from a data frame (df)
   #  or construct z[] but extract rel[] from a list (mdf)
   # setup am object as a list
   #
   # must specify k = no fixed effects, l = no traits
-  #              v = no of animal random effects ( var and cov components)
-  #          cohortparts = vector of df ccol nos for parts of cohort defining common env
-  #	   components = vector listing animal components to be fitted
+  #  cohortparts = vector of df ccol nos for parts of cohort defining common env
+  #  components = vector listing non-specific animal components to be fitted
+  #  specific.components =  components specific to one or more factors
+  #  relmat = flags whether inline or withdf
   #
   # determines m = no individuals in df
   #            n = no of individuals with data
@@ -34,120 +36,321 @@ function (mdf,df, k, l, v, x, y, cohortparts, components,relmat,ctable) {
 #    ncohortcodes <- length(unique(cohortcode)) counts NA !!
     cat("ncohortcodes = ",ncohortcodes,"\n")
   }
-# setup Z,R matrices - for e, a, m, ...  effects
-  z <- list(i=matrix(0,n,m),m=matrix(0,n,m),c=matrix(0,n,ncohortcodes))
+# setup R matrices - for e, a, m, ...  effects
   rel <- list(e=NULL,a=NULL,aa=NULL,d=NULL,ad=NULL,dd=NULL,s=NULL)
+
+# setup logical miss[] - flags individuals in pedigree but no Y data
   miss <- match(dimnames(df)[[1]], dimnames(y)[[1]])
 #
-# z$i - incidence of individuals measured in pedigree - (n x m)
-#     - always do z$i
+
+# non-specific and specific mappings into pedigree
+# All specific factors must be in df, but dont have to be in the fixed model
+  nnsc <- length(components) # no of non-specific components
+  nsf <- length(specific.components) # no of factors with specific components
+  cat("No of factors with specific components:",nsf,"\n")
+  effnandc <- vector("list",length=nsf) # effect names and codes pasted
+  effnames <- names(specific.components) # ie "Sex", "Age", ..
+  effcodes <- vector("list",length=nsf)  # effect codes
+  comcodes <- vector("list",length=nsf)  # var/cov component codes
+  varcodes <- vector("list",length=nsf)  # car component codes
+  nsc <- 0   # no of specific components across all factors
+  nsvc <- 0  # no of specific var/cov components across all factors
+  if(nsf > 0) {
+    for (i in 1:nsf) {
+      effcodes[[i]] <- levels(df[,effnames[i]])
+      comcodes[[i]] <- combpaste(effnames[i],permpaste(effcodes[[i]]))
+      varcodes[[i]] <- combpaste(effnames[i],selfpaste(effcodes[[i]]))
+      effnandc[[i]] <- combpaste(effnames[i],effcodes[[i]])
+      nsc <- nsc + length(effcodes[[i]])
+      nsvc <- nsvc + length(comcodes[[i]]) * length(specific.components[[i]])  # includes cross-factor covs
+    }
+  names(effcodes) <- effnames
+  names(comcodes) <- effnames
+  names(effnandc) <- effnames
+# cat("effcodes:\n")
+# print(effcodes)
+# cat("comcodes:\n")
+# print(comcodes)
+# cat("effnandc:\n")
+# print(effnandc)
+  }
+  nc <- nnsc + nsc  # total no of components fitted
+  cat("No of non-specific components partitioned:",nnsc,"\n")
+  cat("No of factors with specific components:",nsf,"\n")
+  cat("No of specific variance components partitioned (per component):",nsc,"\n")
+  cat("No of specific variance and covariance components partitioned (per component):",nsvc,"\n")
+
+# Individual effects
+#  Z matrices (1 for all I's, 1 for each level of each specific factor)
+# Always make individual Z matrices
+  nzi <- 1 + nsc
+  zi <- vector("list",length = nzi)
+  zinames <- c("NS",unlist(effnandc))
+  names(zi) <- zinames # name of "NS" is blank
+
+# construct each element ( matrix) of zi and add it to list zi
+
+# zi$NS - incidence of all individuals measured in pedigree - (n x m)
+#     - always do z$NS  ( NS = non-specific)
+  zi$NS <- matrix(0,n,m)
   inrow <- 0.0  # inrow counts individuals with no missing data(or X codes)
   for (i in 1:m) {   # i indexes individuals by row in df
     if (!is.na(miss[i])) {
       inrow <- inrow + 1   # inrow indexes individuals by row in x,y,z
       for (j in 1:m) {
-        z$i[inrow,j] <- 0.0
+        zi$NS[inrow,j] <- 0.0
       }
-      z$i[inrow,i] <- 1.0
+      zi$NS[inrow,i] <- 1.0
     }
   }
-# Additive genetic effects - need rel$a matrix
- if(any(!is.na(match(components,ctable$addg)))){
-   # rel$a - additive relationship matrix
-  if(relmat == "inline") {
-   rel$a <- am.arel(df)
-  }
-  else if(relmat == "withdf"){
-   rel$a <- as.matrix(mdf$rel$a)
-  }
- }
-# Residual or E effect - use z$i for residual Z matrix
-# rel$e - residual relationship matrix - usually I
-  if(relmat == "inline"){
-    rel$e <- diag(m)
-  }
-  else if(relmat == "withdf") {
-    rel$e <- as.matrix(mdf$rel$e)
-  }
-# Non additive genetic effects
-  # dominance
-  if(any(!is.na(match(components,ctable$domg)))){
-    rel$d <- as.matrix(mdf$rel$d)
-  }
-  # epistasis-additive
-  if(any(!is.na(match(components,ctable$epiaddg)))){
-    rel$aa <- as.matrix(mdf$rel$aa)
-  }
-  # epistasis-dominance
-  if(any(!is.na(match(components,ctable$epidomg)))){
-    rel$ad <- as.matrix(mdf$rel$ad)
-    rel$dd <- as.matrix(mdf$rel$dd)
-  }
-  # sex-linked
-  if(any(!is.na(match(components,ctable$sexlinaddg)))){
-     rel$s <- as.matrix(mdf$rel$s)
+#
+# setup zi$... for sex specific and fixed effect specific cases
+# only do this if is at least one specific factor
+  if(nsf > 0) {
+    count <- 0
+    for(kf in 1:length(effnames)) {
+      if(any(!is.na(match(specific.components[[kf]],ctable$ind)))) {
+        count <- count + 1
+      }
+    }
+    if(count > 0 ) {
+      kl <- 1  # kl is subscript for zinames 
+      for (kf in 1:length(effnames)) {   # kf is factor name
+        for (lc in 1:length(effcodes[[kf]])) {   # lc is codes for factor kf
+          kl <- kl + 1
+#         zi[[zinames[kl]]] <- matrix(0,n,m)
+          zi[[kl]] <- matrix(0,n,m)
+          inrow <- 0
+          for(i in 1:m) {
+            if (!is.na(miss[i])) {
+              inrow <- inrow + 1
+              if(df[i,effnames[kf]] == effcodes[[kf]][lc]) {
+#               zi[[zinames[kl]]][inrow,i] <- 1
+                zi[[kl]][inrow,i] <- 1
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
+
+
 # Maternal effects
-# z$m - incidence of dams of measured individuals in pedigree - ( n x m)
- if(any(!is.na(match(components,ctable$mat)))){
+# DId must be in the df
+# zm - incidence of dams of measured individuals in pedigree - ( n x m)
+  nzm <- 1 + nsc
+  zm <- vector("list",length = nzm)
+  names(zm) <- zinames
+# Only make zm$NS if a non-specific maternal component present
+ if(any(!is.na(match(components,ctable$mat)))){  # non-specific maternal component check
   inrow <- 0.0
+  zm$NS <- matrix(0,n,m)
 # miss <- match(dimnames(df)[[1]], dimnames(y)[[1]])
   for(i in 1:m) {
     if(!is.na(miss[i])) {
       inrow <- inrow + 1   # inrow indexes individuals by row in x,y,z
       for (j in 1:m) {
-        z$m[inrow,j] <- 0.0
+        zm$NS[inrow,j] <- 0.0
       }
       if(!is.na(df$DId[i])){
-        z$m[inrow,df$DId[i]] <- 1.0
+        zm$NS[inrow,df$DId[i]] <- 1.0
       }
     }
   }
  }
 
-# cat("z$m:\n")
-# print(z$m)
+# Setup zm$... for sex-specific and fixed effect specific cases
+# Only do this if there is a specific maternal component present
+  if( nsf > 0) {
+    count <- 0
+    for(kf in 1:length(effnames)){
+      if(any(!is.na(match(specific.components[[kf]],ctable$mat)))){
+        count <- count + 1
+      }
+    }
+    if(count > 0) {
+      kl <- 1  # kl is subscript for zinames
+      for (kf in 1:length(effnames)) {   # kf is factor name
+        for (lc in 1:length(effcodes[[kf]])) {   # lc is codes for factor kf
+          kl <- kl + 1
+          zm[[kl]] <- matrix(0,n,m)
+          inrow <- 0
+          for(i in 1:m) {
+            if (!is.na(miss[i])) {
+              inrow <- inrow + 1
+              if(df[i,effnames[kf]] == effcodes[[kf]][lc]) { # if Ind has effcode
+                if(!is.na(df$DId[i])){ # if dam is present
+                  zm[[kl]][inrow,df$DId[i]] <- 1  # set Ind's row and dam's col 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+
 # Common cohort env effect ( same cohort)
-# z$c - incidence of measured individuals in cohorts (n x ncohorts)
-  if(any(!is.na(match(components,ctable$cohort)))){
+# All cohort factors must be in df and in cohort formula
+# zc - incidence of measured individuals in cohorts (n x ncohorts)
+  nzc <- 1 + nsc
+  zc <- vector("list",length = nzc)
+  names(zc) <- zinames
+# Only make zc$NS if a non-specific cohort component present
+  if(any(!is.na(match(components,ctable$cohort)))){  # specific cohort component check
     cohortcode <- as.factor(cohortcode)
-#  aov() method - discarded due to problems with nrow(z$c)
+#  aov() method - discarded due to problems with nrow(zc)
 #   ce.aov <- aov(df$Ymat ~ -1 + cohortcode,x=T)
-#   z$c <- ce.aov$x
-# match method - similar to z$i and z$m
+#   zc <- ce.aov$x
+# match method - similar to zi and zm
     inrow <- 0
+    zc$NS <- matrix(0,n,ncohortcodes)
 #   miss <- match(dimnames(cohortcode)[[1]], dimnames(y)[[1]])
   # miss gives mth cohortcode[] matches nth y[] value
     for(i in 1:m){
       if(!is.na(miss[i])) {
         inrow <- inrow + 1 # inrow indexes individuals by row in x,y,z
         for(j in 1:ncohortcodes) {
-          z$c[inrow,j] <- 0
+          zc$NS[inrow,j] <- 0
         }
 #       if(!is.na(cohortcode[i])){
           whichcohort <- match(cohortcode[i], levels(cohortcode))
-          z$c[inrow,whichcohort] <- 1.0
+          zc$NS[inrow,whichcohort] <- 1.0
 #       }
       }
     }
 
-    if(nrow(z$i) != nrow(z$c)) {
-      cat("nrows in z$i = ",nrow(z$i),"\n")
-      cat("nrows in z$c = ",nrow(z$c),"\n")
+    if(nrow(zi$NS) != nrow(zc$NS)) {
       stop("these must be equal:\n")
     }
-#    cat("z$c:\n")
-#    print(z$c)
-# rel$c = pseudo relationship matrix for common env - not needed
   }
 
-# Maternal permanent environmental effect (same dam but not same cohort)
-# z$m - dams in pedigree - as above
-#  rel$m - pseudo relationship matrix for same dam and not same cohort - not needed
+# Setup zc$... for sex-specific and fixed effect specific cases
+# Only do this if there is a specific cohort component present
+  if(nsf > 0) {
+    count <- 0
+    for(kf in 1:length(effnames)){
+      if(any(!is.na(match(specific.components[[kf]],ctable$cohort)))){
+        count <- count + 1
+      }
+    }
+    if(count > 0) {
+      kl <- 1  # kl is subscript for zinames
+      for (kf in 1:length(effnames)) {   # kf is factor name
+        for (lc in 1:length(effcodes[[kf]])) {   # lc is codes for factor kf
+          kl <- kl + 1
+          zc[[kl]] <- matrix(0,n,ncohortcodes)
+          inrow <- 0
+          for(i in 1:m) {
+            if (!is.na(miss[i])) {
+              inrow <- inrow + 1
+              if(df[i,effnames[kf]] == effcodes[[kf]][lc]) { # if Ind has effcode
+                if(!is.na(cohortcode[i])){ # if cohortcode is present
+                  whichcohort <- match(cohortcode[i],levels(cohortcode))
+                  zc[[kl]][inrow,whichcohort] <- 1  # set Ind's row and cohort's col 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+#
+# Setup relationship matrices
+#
+# Additive genetic effects - need rel$a matrix
+  count <- 0
+  if(nsf > 0) {
+    for(kf in 1:length(effnames)) {
+      if(any(!is.na(match(specific.components[[kf]],ctable$addg)))){
+        count <- count + 1
+      }
+    }
+  }
+  if (count > 0 || any(!is.na(match(components,ctable$addg)))) {
+    # rel$a - additive relationship matrix
+   if(relmat == "inline") {
+    rel$a <- am.arel(df)
+   }
+   else if(relmat == "withdf"){
+    rel$a <- as.matrix(mdf$rel$a)
+   }
+  }
+
+  
+# Residual or E effect - use I for residual rel matrix
+# rel$e - residual relationship matrix - usually I
+# Always make rel$e
+  if(relmat == "inline"){
+    rel$e <- diag(m)
+  }
+  else if(relmat == "withdf") {
+    rel$e <- as.matrix(mdf$rel$e)
+  }
+
+# Non additive genetic effects
+  # dominance
+  count <- 0
+  if(nsf > 0) {
+    for(kf in 1:length(effnames)) {
+      if(any(!is.na(match(specific.components[[kf]],ctable$domg)))){
+        count <- count + 1
+      }
+    }
+  }
+  if (count > 0 || any(!is.na(match(components,ctable$domg)))) {
+    rel$d <- as.matrix(mdf$rel$d)
+  }
+  # epistasis-additive
+  count <- 0
+  if(nsf > 0) {
+    for(kf in 1:length(effnames)) {
+      if(any(!is.na(match(specific.components[[kf]],ctable$epiaddg)))){
+        count <- count + 1
+      }
+    }
+  }
+  if (count > 0 || any(!is.na(match(components,ctable$epiaddg)))) {
+    rel$aa <- as.matrix(mdf$rel$aa)
+  }
+  # epistasis-dominance
+  count <- 0
+  if(nsf > 0) {
+    for(kf in 1:length(effnames)) {
+      if(any(!is.na(match(specific.components[[kf]],ctable$epidomg)))){
+        count <- count + 1
+      }
+    }
+  }
+  if (count > 0 || any(!is.na(match(components,ctable$epidomg)))) {
+    rel$ad <- as.matrix(mdf$rel$ad)
+    rel$dd <- as.matrix(mdf$rel$dd)
+  }
+  # sex-linked
+  count <- 0
+  if(nsf > 0) {
+    for(kf in 1:length(effnames)) {
+      if(any(!is.na(match(specific.components[[kf]],ctable$sexlinaddg)))){
+        count <- count + 1
+      }
+    }
+  }
+  if (count > 0 || any(!is.na(match(components,ctable$sexlinaddg)))) {
+     rel$s <- as.matrix(mdf$rel$s)
+  }
+
 
 # construct the am list object
-  am <- list(m=m,n=n,k=k,l=l,v=v,x=x,y=y,z=z,rel=rel,components=components)
+  am <- list(m=m,n=n,k=k,l=l,v=nnsc + nsvc,x=x,y=y,zi=zi,zm=zm,zc=zc,rel=rel,components=components,specific.components=specific.components,zinames=zinames,effnames=effnames,effcodes=effcodes,effnandc=effnandc,comcodes=comcodes,varcodes=varcodes,nnsc=nnsc,nsc=nsc,nc=nc,nsvc=nsvc)
  
   return(am)
 }

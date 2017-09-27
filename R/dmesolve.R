@@ -1,5 +1,5 @@
 dmesolve <-
-function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NULL,posdef=T,gls=F,glsopt=list(maxiter=200,bdamp=0.8,stoptol=0.01), dmeopt="qr",ncomp.pcr="rank",relmat="inline",dmekeep=F,dmekeepfit=F) {
+function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.components=NULL,cohortform=NULL,posdef=T,gls=F,glsopt=list(maxiter=200,bdamp=0.8,stoptol=0.01), dmeopt="qr",ncomp.pcr="rank",relmat="inline",dmekeep=F,dmekeepfit=F) {
 # dmesolve() - dyadic model equations solved by ols and (optionally) gls
   #
   # fixform is the model formula for fixed effects
@@ -33,6 +33,15 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
     print(components)
     stop("Component(s) not recognized:\n")
   }
+# check specific components in ctable()
+  if(!is.null(specific.components)){
+    for(i in 1:length(specific.components)) {
+      if(any(is.na(match(specific.components[[i]],ctable$all)))){ 
+        print(specific.components[i])
+        stop("Component(s) not recognized:\n")
+      }
+    }
+  }
 #
   if(is.null(mdf$rel)) {
     df <- mdf
@@ -48,8 +57,8 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 # cat("Model formula for fixed effects:\n")
 # print(fixform)
   cat("Random effect partitioned into components: Residual:\n")
-  v <- length(components)
-  cat("No of individual variance components partitioned(v):",v,"\n")
+#  v <- length(components)
+#  cat("No of individual non-specific variance components partitioned:",v,"\n")
 # print(components)
 # cat("Model formula for Cohort environment:\n")
 # print(cohortform)
@@ -87,7 +96,17 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 
 # cohort setup
 # cat("Cohort setup:\n")
+  ccount <- 0
   if(any(!is.na(match(components,ctable$cohort)))){
+    ccount <- ccount + 1
+  }
+  effnames <- names(specific.components)
+  for(kf in 1:length(effnames)){
+    if(any(!is.na(match(specific.components[[kf]],ctable$cohort)))){
+      ccount <- ccount + 1
+    }
+  }
+  if(ccount > 0) {
     cohortlabs <- attributes(terms(cohortform))$term.labels
     celabs <- c("DId",cohortlabs)
 #   cat("cohortlabs:\n")
@@ -109,10 +128,10 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 #   print(ceparts)
 
 #  setup am object
-# am is an antemodel object containing k,l,m,n,r,v,Z1,..Zr,Rel,..Rel,X,Y
+# am is an antemodel object containing k,l,m,n,r,v,Z1,..Zr,Rel,..Rel,X,Y,...
   cat("Setup antemodel matrices:\n")
-  am <- am.zandrel(mdf,df,k,l,v,as.matrix(fixed.aov$x),as.matrix(fixed.aov$y),
-                   cohortparts,components,relmat,ctable)
+  am <- am.zandrel(mdf,df,k,l,as.matrix(fixed.aov$x),as.matrix(fixed.aov$y),
+                   cohortparts,components,specific.components,relmat,ctable)
   if( l == 1) {
 #   dimnames(am$y) <- list(NULL,"Ymat")   #list(NULL,dimnames(df[[2]])[dimnames(df)[[2]] == "Ymat"]])
     dimnames(am$y) <- list(NULL,as.character(terms(fixform)[[2]]))
@@ -121,10 +140,10 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 
   cat("no of individuals in pedigree (m) = ",am$m,"\n")
   cat("no of individuals with data and X codes (n) = ",am$n,"\n")
-#  cat("Z matrix\n")
-#  print(am$z)
-  am.list <- list(am=am, components=components, v=v, cohortform=cohortform, cohortlabs=cohortlabs,
+
+  am.list <- list(am=am, components=components, v=am$v, cohortform=cohortform, cohortlabs=cohortlabs,
               celabs=celabs, cohortparts=cohortparts, ceparts=ceparts)
+  v <- am$v  # no of components ( non-specific and specific)
 #  cat("Antimodel matrices completed:\n")
 
 #
@@ -151,8 +170,6 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 # SS after OLS AOV fit
 # cat("Calculate residual variance after OLS fit:\n:")
   ssa <- t(ymxb) %*% ymxb
-# cat("ssa:\n")
-# print(ssa)
   degf <- am$n - am$k
   vara <- ssa/degf
 # cat("Adjusted variance of individuals after OLS (Y-Xb)'(Y-Xb):\n")
@@ -174,6 +191,9 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 
   ols.fixed.list <- list(b=b,seb=seb,vara=vara,totn=am$n,degf=degf)
 
+  if (am$v == 0) {
+    stop("No components defined:\n")
+  }
 #
 #
 # DME step:
@@ -188,8 +208,9 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 #
 
 
-# setup emat - expectation matrix (also emat.qr and zaz = vmat)
+# setup emat ( W matrix)- expectation matrix (also emat.qr and zaz = vmat)
     dyad.explist <- dyad.am.expect(am,gls,dmeopt) 
+    am$v <- dyad.explist$newv  # reduce v to no of estimable components
 
 #
 # calc siga from evec and emat
@@ -365,26 +386,20 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
 
 # cat("Partitioned variance  components from DME equations:\n")
 # print(siga)
+  cat("DME substep completed:\n")
 
+# Subdivide siga if are specific components, otherwise do usual parameters
+ 
+  nsf <- length(specific.components)
+  if (nsf == 0) {  # no specific factors
 #
-# check siga[1,], siga[2,], siga[3,], siga[5,] are positive definite
+# check siga[,] positive definite
 # adjust siga[,] if not pd
   if(posdef){
     siga <- siga.posdef(siga,am,ctable)
 #   cat("Partitioned variance components made positive definite:\n")
 #   print(siga)
   }
-  cat("DME substep completed:\n")
-
-
-#  sum variance components (by DME method) to get phenotypic variances
-# cat("Summing variance component estimates to get phenotypic component:\n")
-# cat("Sums of individual variance components(by DME method):\n")
-    covp <- apply(siga,2,sum)
-#  reorganize sums into an lxl matrix
-   covp <- matrix(covp,am$l,am$l,dimnames=list(colnames(am$y),colnames(am$y)))
-#  print(covp)
-#  cat("Above sums of components estimate population phenotypic variance:\n")
 
    ols.random.list <- list(siga=siga, sesiga=sesiga, vard=vard, degfd=degfd)
 #
@@ -396,6 +411,57 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
    ols.list <- c(aov.list, ols.fixed.list, dme.exp.list, dme.fit.list, ols.random.list, ols.genpar.list)
 #  outlist <- list(ols=ols.list)
    outlist <- ols.list
+
+  }  # end of no specific factors case
+
+  else {  # some specific factors
+#    is more than one way of summing to phenotypic variances
+#    because phenotypic var/cov's are also specific
+#    determine how many specific cases - one VarP for every factor effcode[[kf]]
+#                   and every effnandc[[kf]] - Sex:M:M, Sex:F:F
+#                   (if let nonspecific components apply to all classes)
+#                and every comcodes[[kf]] - Sex:M:M,Sex:M:F,Sex:F:M,Sex:F:F
+#                (if let nonspecific components be NA for cross-class cases)
+
+#
+# check siga[,] positive definite
+# adjust siga[,] if not pd
+  if(posdef){
+    siga <- siga.posdef.specific(siga,am,ctable)
+#   cat("Partitioned variance components made positive definite:\n")
+#   print(siga)
+  }
+
+# make random.list
+  ols.random.list <- list(siga=siga,sesiga=sesiga,vard=vard,degfd=degfd)
+
+# augment siga with inestmable components set to NA
+  ielist <- sigatoie(dyad.explist$cnames,dyad.explist$cnamesie,siga,vsiga,sesiga,am,nsf)
+# am$v <- ielist$vie  #  increment v to all components(est and inest)
+# siga <- ielist$sigaie
+# sesiga <- ielist$sesigaie
+# vsiga <- ielist$vsigaie
+
+# map siga int vc list of phencovclasses
+  vclist <- sigatovc(ielist$siga,ielist$vsiga,ielist$sesiga,am,nsf)
+
+
+    # genetic parameters
+    ols.specific.genpar.list <- vector("list",length=length(vclist$phencovclasses))
+    for ( ic in 1:length(vclist$phencovclasses)) {
+      ols.specific.genpar.list[[ic]] <- comtopar.specific(nrow(vclist$vc[[ic]]), am$l, vclist$vc[[ic]], vara, vclist$var.vc[[ic]], vclist$se.vc[[ic]], ctable,ic,vclist$phencovclasses[ic],vclist$rownames.vc.long[[ic]],siga)
+    }
+    names(ols.specific.genpar.list) <- vclist$phencovclasses
+#cat("ols.specific.genpar.list:\n")
+#print(ols.specific.genpar.list)
+
+
+   ols.list <- c(aov.list, ols.fixed.list, dme.exp.list, dme.fit.list, ols.random.list, list(specific=ols.specific.genpar.list))
+#  outlist <- list(ols=ols.list)
+   outlist <- ols.list
+
+  }   #  end of some specific factors case
+
    cat("OLS-b step completed:\n")
 
 #
@@ -410,21 +476,61 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),cohortform=NU
    }
 
 #  GLS iteration of b's
+cat("v = ",am$v,"\n")
+cat("l = ",am$l,"\n")
    gls.list <- gls.iter.b(am, b, siga, dyad.explist, glsopt, dmeopt, ctable, ncomp.pcr, dmekeepfit)
-#  print(gls.list)
 
      if(gls.list$ok) {
-#      cat("Components to genetic parameters and SE's:\n")
-       gls.genpar.list <- comtopar(am$v,am$l,gls.list$siga, gls.list$msa, gls.list$vsiga,gls.list$sesiga,ctable)
-       gls.list.out <- list(b=gls.list$b, seb=gls.list$seb, siga=gls.list$siga, 
-        sesiga=gls.list$sesiga, vard=gls.list$vard, msr=gls.list$msr,
-        msrdf=gls.list$msrdf, msa=gls.list$msa)
-       gls.list.out <- c(gls.list.out,gls.genpar.list,gls.list$dme.fit.list)
-       # setup return object
-#      outlist <- c(list(ols=ols.list), list(gls=gls.list.out))
-       outlist <- c(ols.list, list(gls=gls.list.out))
        cat("GLS-b step completed successfully:\n")
-    }
+       cat("Components to genetic parameters and SE's:\n")
+
+# Subdivide siga if are specific components, otherwise do usual parameters
+ 
+       nsf <- length(specific.components)
+       if (nsf == 0) {  # no specific factors
+
+         cat("GLS genetic parameters with nonspecific components:\n")
+         gls.genpar.list <- comtopar(am$v,am$l,gls.list$siga, gls.list$msa, gls.list$vsiga,gls.list$sesiga,ctable)
+         gls.list.out <- list(b=gls.list$b, seb=gls.list$seb, siga=gls.list$siga, sesiga=gls.list$sesiga, vard=gls.list$vard, msr=gls.list$msr, msrdf=gls.list$msrdf, msa=gls.list$msa)
+         gls.list.out <- c(gls.list.out,gls.genpar.list,gls.list$dme.fit.list)
+         # setup return object
+#        outlist <- c(list(ols=ols.list), list(gls=gls.list.out))
+         outlist <- c(ols.list, list(gls=gls.list.out))
+
+      }  # end no specific factor case
+      else {  # some specific factors
+
+        cat("GLS genetic parameters with specific components:\n")
+
+#  augment siga with inestimable components
+        ielist <- sigatoie(dyad.explist$cnames,dyad.explist$cnamesie,gls.list$siga,gls.list$vsiga,gls.list$sesiga,am,nsf)
+#       am$v <- ielist$vie  #  increment v to all components(est and inest)
+#       siga <- ielist$sigaie
+#       sesiga <- ielist$sesigaie
+#       vsiga <- ielist$vsigaie
+        
+#  map siga int vc list of phencovclasses
+        vclist <- sigatovc(ielist$siga,ielist$vsiga,ielist$sesiga,am,nsf)
+
+#  genetic parameters for each phencovclass
+        gls.specific.genpar.list <- vector("list",length=length(vclist$phencovclasses))
+         for ( ic in 1:length(vclist$phencovclasses)) {
+           gls.specific.genpar.list[[ic]] <- comtopar.specific(nrow(vclist$vc[[ic]]), am$l, vclist$vc[[ic]], vara, vclist$var.vc[[ic]], vclist$se.vc[[ic]], ctable,ic,vclist$phencovclasses[ic],vclist$rownames.vc.long[[ic]],siga)
+         }
+         names(gls.specific.genpar.list) <- vclist$phencovclasses
+#    cat("gls.specific.genpar.list:\n")
+#    print(gls.specific.genpar.list)
+
+         gls.list.out <- list(b=gls.list$b, seb=gls.list$seb, siga=gls.list$siga, sesiga=gls.list$sesiga, vard=gls.list$vard, msr=gls.list$msr, msrdf=gls.list$msrdf, msa=gls.list$msa)
+         gls.list.out <- c(gls.list.out,list(specific=gls.specific.genpar.list),gls.list$dme.fit.list)
+
+         # setup return object
+         outlist <- c(ols.list,list(gls=gls.list.out))
+
+      }  # end some specific factors
+
+    } # end if OK for gls
+
     else if (!gls.list$ok) {
 #      outlist <- c(list(ols=ols.list))
        outlist <- ols.list

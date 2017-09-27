@@ -4,7 +4,7 @@
 Construct an object of class \code{dmm} from user-supplied data
 }
 \description{
-Construct an object of class \code{dmm} containing all attributes needed to run the \code{gresponse()} function. The user must supply a phenotypic covariance matrix, and a genetic covariance matrix for each of the components needed by \code{gresponse()}
+Construct an object of class \code{dmm} containing all attributes needed to run the \code{gresponse()} function. The user must supply a phenotypic covariance matrix, and a genetic covariance matrix for each of the components needed by \code{gresponse()} Warning; this function does not currently support class specific genetic parameters.
 }
 \usage{
 make.dmmobj(p = NULL, components = c("VarG(Ia)"), ...)

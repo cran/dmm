@@ -1,10 +1,10 @@
 \name{summary.dmm}
 \alias{summary.dmm}
 \title{
-Make summary tables of (co)variance component estimates for a dmm object.
+Make summary tables of (co)variance component estimates and fixed effect estimates for a dmm object.
 }
 \description{
-Extracts the (co)variance component eatimates from an object of class \code{dmm}, for the specified set of traits and set of components. Makes tables of component estimates ordered either by trait or by component. Tables include component estimate, its standard error, and its 95 percent confidence limits.
+Extracts the (co)variance component and fixed effect estimates from an object of class \code{dmm}, for the specified set of traits and set of components. Makes tables of component estimates ordered either by trait or by component. Tables include component estimate, its standard error, and its 95 percent confidence limits. If there are class specific components these appear with appropriate labels in the list of components.
 }
 \usage{
 \S3method{summary}{dmm}(object, traitset = "all", componentset = "all", bytrait = T,
@@ -37,6 +37,7 @@ Ellipsis argument.
 }
 \details{
 This is a long printout with  estimates, standard errors and confidence limits, arranged in tables with one estimate per line. For a short printout see function \code{print.dmm()}.
+In the case of class-specific components, the components which are class-specific are labelled with their class-codes prepended to the variance component name, and components for all classes are included, so the listed components do not sum to phenotypic variance. To list the components in class groups, so that they sum to the class phenotypic variance use function \code{csummary()}.
 }
 \value{
 %%  ~Describe the value returned
@@ -62,6 +63,7 @@ Neville Jackson
 }
 \note{
 There is no provision to constrain the 95 percent confidence limits for component estimates. Hence for small samples, these may vary outside the bounds for the component, that is for components which are variances, they may be negative. Fixed effects are not bounded.
+Use \code{summary()} if you want to see the components as estimated. Use \code{csummrry()} if you want to see the components summing to phenotypic (co)variance, or sorted into class-specific groups.
 }
 
 

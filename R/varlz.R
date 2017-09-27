@@ -5,12 +5,17 @@ function(vz,z){
   tol <- 1.e-8
   tol <- 1 + tol
   cvp <- 1 + vz/(z*z)
-  if(cvp < tol) {
-#   vlz <- log(tol)
-    vlz <- cvp - 1
+  if(!is.na(cvp)) {
+    if(cvp < tol) {
+  #   vlz <- log(tol)
+      vlz <- cvp - 1
+    }
+    else{
+      vlz <- log(cvp)
+    }
   }
-  else{
-    vlz <- log(cvp)
+  else {
+    vlz <- NA
   }
   return(vlz)
 }

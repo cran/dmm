@@ -44,6 +44,20 @@ function(){
 
   all <- c(allvar,allcov)
 
-  ctable <- list(cohortvar=cohortvar, cohortcov=cohortcov, cohort=cohort, evar = evar, ecov=ecov, e=e, addgvar=addgvar, domgvar=domgvar, epiaddgvar=epiaddgvar, epidomgvar=epidomgvar, sexlinaddgvar=sexlinaddgvar, gvar=gvar, allvar=allvar, addgcov=addgcov, domgcov=domgcov, epiaddgcov=epiaddgcov, epidomgcov=epidomgcov, sexlinaddgcov=sexlinaddgcov, gcov=gcov, g=g,  allcov=allcov, addg=addg, domg=domg, epiaddg=epiaddg, epidomg=epidomg, sexlinaddg=sexlinaddg, indvar=indvar, indcov=indcov, ind=ind,  matvar=matvar, matcov=matcov, mat=mat,  all=all)
+  allzpre <- c("zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zc","S","S","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","S","S")
+
+  allzpost <- c("zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zc","S","S","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","S","S")
+
+  allrel <- c("e","e","a","a","s","s","d","d","aa","aa","ad","ad","dd","dd","I","S","S","e","e","a","a","s","s","d","d","aa","aa","ad","ad","dd","dd","S","S")
+
+  allindenv <- c("VarE(I)","CovE(I,M)","CovE(M,I)","CovE(I,M&!C)","CovE(M&!C,I)")
+
+  cohortzpre1 <- c("zc","zm","zm","zi","zm")
+  cohortzpost1 <- c("zc","zm","zm","zm","zi")
+  cohortzpre2 <- c(NA,"zc","zc","zc","zc")
+  cohortzpost2 <- c(NA,"zc","zc","zc","zc")
+  cohortop <- c(NA,"&","&!","&!","&!")
+
+  ctable <- list(cohortvar=cohortvar, cohortcov=cohortcov, cohort=cohort, evar = evar, ecov=ecov, e=e, addgvar=addgvar, domgvar=domgvar, epiaddgvar=epiaddgvar, epidomgvar=epidomgvar, sexlinaddgvar=sexlinaddgvar, gvar=gvar, allvar=allvar, addgcov=addgcov, domgcov=domgcov, epiaddgcov=epiaddgcov, epidomgcov=epidomgcov, sexlinaddgcov=sexlinaddgcov, gcov=gcov, g=g,  allcov=allcov, addg=addg, domg=domg, epiaddg=epiaddg, epidomg=epidomg, sexlinaddg=sexlinaddg, indvar=indvar, indcov=indcov, ind=ind,  matvar=matvar, matcov=matcov, mat=mat,  all=all, allzpre=allzpre, allzpost=allzpost, allrel=allrel, allindenv=allindenv, cohortzpre1=cohortzpre1, cohortzpost1=cohortzpost1, cohortzpre2=cohortzpre2, cohortzpost2=cohortzpost2, cohortop=cohortop)
   return(ctable)
 }

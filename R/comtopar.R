@@ -119,7 +119,6 @@ function(v, l, siga,vara, vsiga, sesiga, ctable){
 
 # SE's
   sep.list <- separ(varcomp, vsiga, v,l, fracta, correa)
-# print(sep.list)
 
   outlist <- list(component=labelc,
           correlation=correa, correlation.variance=sep.list$vcorre,

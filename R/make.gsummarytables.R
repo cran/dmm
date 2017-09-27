@@ -1,0 +1,98 @@
+make.gsummarytables <-
+function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3)
+# make.gsummarytables()  -  make one set on genetic summary tables
+#                        - ftables, rtables, ptables
+{
+
+     if(traitset[1] == "all"){
+      traitpairs <- dimnames(dmmobj$variance.components)[[2]]
+      traits <- traitpairstotraits(traitpairs)
+    }
+    else {
+      traits <- traitset
+      traitpairs <- permpaste(traits)
+    }
+    l <- length(traits)
+    alltraitpairs <- dimnames(dmmobj$variance.components)[[2]]
+
+    if(componentset[1] == "all") {
+      components <- dimnames(dmmobj$variance.components)[[1]]
+    }
+    else {
+      components <- componentset
+    }
+
+
+    if(bytrait) {
+      ftables <- vector("list",l)  # one table per trait
+      count <- 0
+      for(j in traits) {
+        count <- count + 1
+        ci95lo <- dmmobj$fraction[components,j] - 1.96 * dmmobj$fraction.se[components,j]
+        ci95hi <- dmmobj$fraction[components,j] + 1.96 * dmmobj$fraction.se[components,j]
+        ftable <- data.frame(Trait=j, Estimate=dmmobj$fraction[components,j],
+                     StdErr=dmmobj$fraction.se[components,j],CI95lo=ci95lo,CI95hi=ci95hi,
+                     row.names=components)
+        # save ftables as one element of a list of tables
+        ftables[[count]] <- ftable
+      }
+
+      rtables <- vector("list",l*l)  # one table per traitpair
+      count <- 0
+      for(i in traits) {
+        for(j in traits) {
+          traitpair <- paste(i,":",j,sep="",collapse=NULL)
+          ij <- match(traitpair,alltraitpairs)
+          count <- count + 1
+          ci95lo <- dmmobj$correlation[components,ij] - 1.96 * dmmobj$correlation.se[components,ij]
+          ci95hi <- dmmobj$correlation[components,ij] + 1.96 * dmmobj$correlation.se[components,ij]
+          rtable <- data.frame(Traitpair=alltraitpairs[ij],
+                       Estimate=dmmobj$correlation[components,ij],
+                       StdErr=dmmobj$correlation.se[components,ij],
+                       CI95lo=ci95lo,CI95hi=ci95hi,row.names=components)
+          rtables[[count]] <- rtable
+        }
+      }
+    }
+    else {  # not bytrait
+      ftables <- vector("list",length(components))  # one table per component
+      count <- 0
+      for(j in components) {
+        count <- count + 1
+        ci95lo <- dmmobj$fraction[j,traits] - 1.96 * dmmobj$fraction.se[j,traits]
+        ci95hi <- dmmobj$fraction[j,traits] + 1.96 * dmmobj$fraction.se[j,traits]
+        ftable <- data.frame(Component=j, Estimate=dmmobj$fraction[j,traits],
+                     StdErr=dmmobj$fraction.se[j,traits],CI95lo=ci95lo,CI95hi=ci95hi,
+                     row.names=traits)
+        # save ftables as one element of a list of tables
+        ftables[[count]] <- ftable
+      }
+
+      rtables <- vector("list",length(components))  # one table per component
+      count <- 0
+      for(i in components) {
+         count <- count + 1
+         ci95lo <- dmmobj$correlation[i,traitpairs] - 1.96 * dmmobj$correlation.se[i,traitpairs]
+         ci95hi <- dmmobj$correlation[i,traitpairs] + 1.96 * dmmobj$correlation.se[i,traitpairs]
+         rtable <- data.frame(Component=i,
+                      Estimate=dmmobj$correlation[i,traitpairs],
+                      StdErr=dmmobj$correlation.se[i,traitpairs],
+                      CI95lo=ci95lo,CI95hi=ci95hi,row.names=traitpairs)
+         rtables[[count]] <- rtable
+      }
+    }
+
+    ptables <- vector("list",1)
+    ci95lo <- as.vector(dmmobj$phenotypic.variance[traits,traits]) - 1.96 * as.vector(dmmobj$phenotypic.variance.se[traits,traits])
+    ci95hi <- as.vector(dmmobj$phenotypic.variance[traits,traits]) + 1.96 * as.vector(dmmobj$phenotypic.variance.se[traits,traits])
+    ptable <- data.frame(Traitpair=traitpairs,
+                         Estimate=as.vector(dmmobj$phenotypic.variance[traits,traits]),
+                         StdErr=as.vector(dmmobj$phenotypic.variance.se[traits,traits]),
+                         CI95lo=ci95lo,CI95hi=ci95hi)
+    ptables[[1]] <- ptable
+
+    retobj <- list(ftables=ftables, rtables=rtables, ptables=ptables, traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+    class(retobj) <- "gsummarytables.dmm"
+    return(retobj)
+
+}

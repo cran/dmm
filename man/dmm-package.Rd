@@ -36,13 +36,15 @@ in a quantitative genetic analysis:
 \item alternative approach to iterative ML and REML estimation procedures
 \item component estimates equivalent to MINQUE (after fixed effects by OLS) and bias-corrected-ML (after fixed effects by GLS)
 \item multi-trait or traitspairwise or traitsblockwise analyses
+\item class-specific genetic parameters
 }
 
 The main functions in dmm are:
 \describe{
 \item{dmm()}{ Sets up and solves dyadic model equations for a dataset which is supplied as a dataframe containing both the pedigree information and the observations}
 \item{mdf()}{Checks the dataframe for compliance with dmm requirements, converts multi-trait data to a matrix within the dataframe, and optionally appends relationship matrices to the dataframe.}
-\item{summary()}{S3 method, reports (co)variance components and standard errors}
+\item{summary()}{S3 method, reports estimated (co)variance components and standard errors}
+\item{csummary()}{S3 method, reports reports (co)varianve components with standard erors, sorted into class-specific groups, so that thaey sum to phenotypic (co)variance within each group}
 \item{gsummary()}{S3 method, reports genetic parameters and standard errors}
 \item{gresponse()}{S3 method, reports genetic response to selection}
 \item{print()}{S3 method, briefly reports output object from dmm()}

@@ -103,7 +103,6 @@ function(siga, am, ctable,varopt="both",covopt="bound"){
           c1 <- match("VarE(M&C)", rownames(siga))
           c2 <- match("VarE(I)", rownames(siga))
         } 
-#  cat("i = ",i," c1 = ",c1," c2 = ",c2,"\n")
          for( j in 1 : am$l) {
            jj <- (j-1)*am$l + j
            for(k in 1 : am$l) {

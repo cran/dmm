@@ -14,7 +14,8 @@ export(
   unfactor,
   condense.dmmarray,
   condense.dmmblockarray,
-  make.countarray
+  make.countarray,
+  csummary
 #  gprint.dmm,
 #  gresponse.dmm,
 #  gsummary.dmm,
@@ -36,9 +37,11 @@ exportClasses(dmm)
 S3method(plot,dmm)
 S3method(print,dmm)
 S3method(print,summary.dmm)
+S3method(print,csummary.dmm)
 S3method(print,gsummary.dmm)
 S3method(print,gresponse.dmm)
 S3method(summary,dmm)
+S3method(csummary,dmm)
 S3method(summary,gresponse.dmm)
 S3method(gsummary,dmm)
 S3method(gresponse,dmm)

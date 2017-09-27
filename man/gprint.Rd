@@ -19,6 +19,7 @@ See other arguments defined for function \code{gprint.dmm()}.
 }
 \details{
 This is a short printout without standard errors or confidence limits. It is the analog of \code{print()} for a dmm object, but with genetic parameters instead of variance components. For a more extensive printout with standard errors and confidence limits, see function \code{gsummary()}.
+If there are class specific components and genetic parameters,  the short printout is repeated for each class.
 }
 \value{
 There is no return value. 

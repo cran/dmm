@@ -4,12 +4,17 @@ function(cyz, y, z){
 # clyz <- log(1 + cyz/(y*z))
   tol <- 1.e-8
   ccp <- 1 + cyz/(y*z)
-  if(ccp < tol) {
-#   clyz <- log(tol)
-    clyz <- ccp -1
+  if(!is.na(ccp)) {
+    if(ccp < tol) {
+  #   clyz <- log(tol)
+      clyz <- ccp -1
+    }
+    else {
+      clyz <- log(ccp)
+    }
   }
   else {
-    clyz <- log(ccp)
+    clyz <- NA
   }
   return(clyz)
 }

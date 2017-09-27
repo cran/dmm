@@ -1,3 +1,8 @@
+dmm_2.1-2       VarE(I) and friends can be class specific
+
+dmm_2.1-1	Variance components and genetic parameters specific to 
+                fixed factor classes
+
 dmm_1.6-1	S3 plotting method plot.dmm() added
                 Attributes renamed in dmm object  dme.yyd -> dme.psi
                                                   dme.eamt -> dme.wmat
@@ -23,4 +28,8 @@ dmm_1.6-4	siga.posdef modified to set symmetric=T on calling eigen()
 		dmsolve()  message when fixed effects not of full rank improved
 		varz() fix bug when first arg is NA
 
-dmm_1.7-1	traits pairwise (option dmmarray) and blockwise (option dmmblockarray)
+dmm_1.7-1	traits pairwise (option dmmarray) and blockwise (option
+                dmmblockarray)
+
+dmm_2.1-1	sex and fixed-effect specific varoiance components
+                and genetic parameters
