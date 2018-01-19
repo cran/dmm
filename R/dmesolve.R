@@ -131,7 +131,8 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 # am is an antemodel object containing k,l,m,n,r,v,Z1,..Zr,Rel,..Rel,X,Y,...
   cat("Setup antemodel matrices:\n")
   am <- am.zandrel(mdf,df,k,l,as.matrix(fixed.aov$x),as.matrix(fixed.aov$y),
-                   cohortparts,components,specific.components,relmat,ctable)
+             cohortparts,components,specific.components,
+             relmat,ctable)
   if( l == 1) {
 #   dimnames(am$y) <- list(NULL,"Ymat")   #list(NULL,dimnames(df[[2]])[dimnames(df)[[2]] == "Ymat"]])
     dimnames(am$y) <- list(NULL,as.character(terms(fixform)[[2]]))
@@ -222,7 +223,12 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
     else{
       dme.exp.list <- list(dme.mean=dyad.explist$emat.mean,dme.var=dyad.explist$emat.var,dme.correl=dyad.explist$emat.cor)
     }
-
+#  exit with saved output if not full rank
+    if(!dyad.explist$fullrank) {
+      ols.list <- c(aov.list,ols.fixed.list,dme.exp.list)
+      return(ols.list)
+    }
+#
 # fit options for DME's
   if(dmeopt == "qr") {
     cat("QR option on dyadic model equations:\n")
@@ -233,8 +239,8 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 #   print(vard)
     vsiga <- kronecker(vard, solve(crossprod(qr.R(dyad.explist$emat.qr))), make.dimnames=T)
     sesiga <- matrix(sqrt(diag(vsiga)), am$v, am$l * am$l, dimnames=dimnames(siga))
-#   cat("vsiga:\n")
-#   print(vsiga)
+#  cat("vsiga:\n")
+#  print(vsiga)
 #   cat("sesiga:\n")
 #   print(sesiga)
     if(dmekeepfit) {

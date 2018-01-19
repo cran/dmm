@@ -1,3 +1,6 @@
+dmm_2.1-3	will produce an output object of class dmm when stops in 
+		dmesolve() with a rank problem in the dme's
+
 dmm_2.1-2       VarE(I) and friends can be class specific
 
 dmm_2.1-1	Variance components and genetic parameters specific to 

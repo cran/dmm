@@ -1,4 +1,4 @@
-078cbc16847cd9b3cf332af3d813ab28 *DESCRIPTION
+54506f3ed4c17a7b56cd5dd37864aae4 *DESCRIPTION
 05587851297dd6ed6a305532176d8f91 *NAMESPACE
 ce6653c203043afeacd43dcb8bf536a4 *R/am.arel.R
 558855356729f64305363dae0c152bf9 *R/am.zandrel.R
@@ -24,14 +24,14 @@ c5e039a730ef85541928fb36ab916830 *R/crosseffectcovtopar.R
 dc36b2ec9bbc500c78d84f34587b0cbe *R/dae.specific.I.R
 65f7cfc6bf90d723a897b61615d6bd18 *R/dae.specific.R
 2d2745e60b97adc5b92d797f83292f1d *R/dae.specific.S.R
-f1e8845a2cfcc039e6f03c5b01f946fc *R/dmesolve.R
+c221d2a243756ef4c250b1b877432a40 *R/dmesolve.R
 c4fd781bed4a5c0495a2e15632164d49 *R/dmm-internal.R
 fcab7ef42967101f807628e566f92600 *R/dmm.R
 e1fde1861b953767c801085a09b5c02b *R/dmm.array.R
 6d4e2294b2c490511a94ba550db53f27 *R/dmm.blockarray.R
 01c642a1466a46e3a1cd54246339ad63 *R/dmm.default.R
 bf901561ab260e77c595a12e4f0b8a5e *R/duplicated.first.R
-17a289cf37b64054f9480d89f315d8ff *R/dyad.am.expect.R
+496af6b36065721d250fde52c525dc64 *R/dyad.am.expect.R
 ac96cc0df507f448395a1e66a37957e2 *R/expect.v.R
 313d79e79d74aa667e36a15bc0e5db7c *R/fixpaste.R
 5cf6ddda065cf3e042dc1b0693174145 *R/genericvarvcnames.R
@@ -43,7 +43,7 @@ c39f8c000b2632b3ea08960421fb32a3 *R/genericvcnames.R
 6b5ed172d67e12c8a0ecfb69dd73d842 *R/gresponse.R
 ee9bab357ed3ea3517585fab0e2fadb2 *R/gresponse.dmm.R
 4a1cb7a5a840f008f31f4771eac8da53 *R/gsummary.R
-7315b13df65db280879b9ddeb9e79aae *R/gsummary.dmm.R
+327e936702ed63a21073e8908b512f99 *R/gsummary.dmm.R
 2ac0ca204b9ff4824b5b72427c2e8e31 *R/gsummary.specific.R
 8eb29b40c09b88c594504b23bd616516 *R/is.cecov.R
 6e29f9ab64f88db9978cb9782f19718a *R/is.crossclass.R
@@ -81,7 +81,7 @@ d9b8777dd0043218032294efc267c59c *R/separ.R
 6b119dcb1e6e30680bd023e671678135 *R/siga.posdef.specific.R
 578340c2a3cfab14f3e0df21215320ee *R/sigatoie.R
 148d5a91e3e1c523d090caeca0875b10 *R/sigatovc.R
-870bd597388c24f731be523c59e609f6 *R/summary.dmm.R
+c413259fc6df46410b06f03af2fdd715 *R/summary.dmm.R
 cea5db7213ef6149a899da67a991da60 *R/summary.gresponse.dmm.R
 809dfbe6eba6719e5f5632635889193f *R/traitpairstotraits.R
 2103eb8b67b963978a8b1dffdd01fc63 *R/unfactor.R
@@ -98,8 +98,8 @@ cea5db7213ef6149a899da67a991da60 *R/summary.gresponse.dmm.R
 b1d0ac3dd916bdc585b37aa02b5e7da8 *data/tstmo1.df.rda
 f1a740d53a8f58e00c1dbd26f654b122 *inst/doc/bugs.txt
 f87410178890da3f027e6a5c020db178 *inst/doc/dmmClassSpecific.pdf
-81073d6c9c681efeb715e4380b46965a *inst/doc/dmmOverview.pdf
-19f415222ad3ea02d917f126f7b26496 *inst/doc/mods.txt
+6c3b1a4dbcc23ac94670cf7e15d6693f *inst/doc/dmmOverview.pdf
+73a989525f64b2a05507f1f5bbb7d77a *inst/doc/mods.txt
 9467278a19cec1bb0ec6984e5a3fa5eb *inst/doc/solvedme.pdf
 35b59cdf268e44bd6d81a195394536f2 *man/chartodec.Rd
 8634b5336aca11531c820fa356329d55 *man/condense.dmmarray.Rd

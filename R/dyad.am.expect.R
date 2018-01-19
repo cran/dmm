@@ -135,6 +135,7 @@ function(am, gls,dmeopt){
 #   cat("column.variances:\n")
 #   print(emat.var)
     emat.cor <- cor(emat,dae$emat)
+    colnames(emat.cor) <- rownames(emat.cor)
 #   cat("column.correlations:\n")
 #   print(emat.cor)
 
@@ -142,9 +143,14 @@ function(am, gls,dmeopt){
   emat.qr <- qr(emat)
 
 # check emat for E'E positive definite - ie emat.qr$rank should be am$v
+  fullrank <- T
   if(emat.qr$rank != am$v) {
     cat(" Rank of DME matrix = ",emat.qr$rank," no of components = ",am$v,"\n")
-    if(dmeopt != "pcr") stop("Dyadic model equations not of full rank: either omit some components or try dmeopt='pcr' \n")
+    if(dmeopt != "pcr") {
+      cat("Dyadic model equations not of full rank: either omit some components or try dmeopt='pcr' \n")
+      fullrank <- F
+      cat("Check outputobject$dme.correl to see which components are confounded:\n")
+    }
   }
 
 # do qr on vmat  - only need if gls=T
@@ -158,6 +164,7 @@ function(am, gls,dmeopt){
   explist <- list(emat=emat, emat.qr=emat.qr,
        vmat=vmat, vmat.qr=vmat.qr,emat.mean=emat.mean,
        emat.var=emat.var,emat.cor=emat.cor, newv=am$v,
-       cnames=dae$cnames,cnamesie=dae$cnamesie) 
+       cnames=dae$cnames,cnamesie=dae$cnamesie,
+       fullrank=fullrank) 
   return(explist)
 }

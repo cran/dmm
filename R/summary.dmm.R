@@ -2,6 +2,14 @@ summary.dmm <-
 function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
 # summary.dmm() - make summary tables for a dmm object
 {
+  # check object is a dmm object fully populated
+  if(is.null(object$b)) {
+    stop("summary.dmm: dmm object does not contain item b:\n:")
+  }
+  if(is.null(object$siga)) {
+    stop("summary.dmm: dmm object does not contain item siga:\n")
+  }
+
    if(traitset[1] == "all"){
     traits <- dimnames(object$b)[[2]][1:ncol(object$b)]
   }
