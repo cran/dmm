@@ -1,5 +1,7 @@
 \name{dmm-internal}
 \alias{am.arel}
+\alias{am.mcrel}
+\alias{am.pyrel}
 \alias{am.zandrel}
 \alias{combpaste}
 \alias{comtopar}
@@ -38,16 +40,14 @@
 \alias{make.cohort}
 \alias{make.csummarytables}
 \alias{make.gsummarytables}
+\alias{make.matcline}
+\alias{make.patyline}
 \alias{match.crosseffect.vars}
 \alias{match.vars}
 \alias{part.add}
 \alias{partocov}
 \alias{permpaste}
 \alias{phenclasses}
-\alias{print.csummarytables.dmm}
-\alias{print.csumspecific.dmm}
-\alias{print.gsummarytables.dmm}
-\alias{print.gsumspecific.dmm}
 \alias{selfpaste}
 \alias{separ}
 \alias{siga.posdef}
@@ -67,6 +67,8 @@ Internal functions not documented and not visible to user.
 }
 \usage{
 am.arel(df)
+am.mcrel(df)
+am.pyrel(df)
 am.zandrel(mdf, df, k, l, x, y, cohortparts, components,
      specific.components, relmat, ctable)
 combpaste(x, y)
@@ -125,16 +127,14 @@ make.csummarytables(object, traitset = "all",
      componentset = "all", bytrait = T, gls = F, digits = 3)
 make.gsummarytables(dmmobj, traitset = "all",
      componentset = "all", bytrait = T, gls = F, digits = 3)
+make.matcline(df)
+make.patyline(df)
 match.crosseffect.vars(longrowname)
 match.vars(longrowname)
 part.add(x, p, prow, pcol)
 partocov(par, covt)
 permpaste(x)
 phenclasses(comcodes)
-print.csummarytables.dmm(x, ...)
-print.gsumspecific.dmm(x, ...)
-print.gsummarytables.dmm(x, ...)
-print.gsumspecific.dmm(x, ...)
 selfpaste(x)
 separ(siga, vsiga, v, l, fracta, correa)
 siga.posdef(siga, am, ctable, varopt = "both", covopt = "bound")

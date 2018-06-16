@@ -11,8 +11,8 @@ Dyadic mixed model analysis with multi-trait responses and pedigree-based partit
 \tabular{ll}{
 Package: \tab dmm\cr
 Type: \tab Package\cr
-Version: \tab 1.7-1\cr
-Date: \tab 2016-01-08\cr
+Version: \tab 2.1-4\cr
+Date: \tab 2018-06-16\cr
 License: \tab GPL-2 \cr
 }
 This package provides tools for setting up and solving dyadic model equations 
@@ -37,6 +37,7 @@ in a quantitative genetic analysis:
 \item component estimates equivalent to MINQUE (after fixed effects by OLS) and bias-corrected-ML (after fixed effects by GLS)
 \item multi-trait or traitspairwise or traitsblockwise analyses
 \item class-specific genetic parameters
+\item maternal or paternal founderline components
 }
 
 The main functions in dmm are:

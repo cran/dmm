@@ -14,8 +14,10 @@ function(){
   domgvar <- c("VarG(Id)","VarG(Md)")
   epiaddgvar <- c("VarG(Ia:a)","VarG(Ma:a)")
   epidomgvar <- c("VarG(Ia:d)","VarG(Ma:d)","VarG(Id:d)","VarG(Md:d)")
+  matcgvar <- c("VarGlm(I)")
+  patygvar <- c("VarGlp(I)")
 
-  gvar <- c(addgvar,domgvar,epiaddgvar,epidomgvar)
+  gvar <- c(addgvar,domgvar,epiaddgvar,epidomgvar,matcgvar,patygvar)
   allvar <- c(evar,gvar,cohortvar)
 
   sexlinaddgcov <- c("CovGs(Ia,Ma)","CovGs(Ma,Ia)")
@@ -32,8 +34,10 @@ function(){
   domg <- c(domgvar,domgcov)
   epiaddg <- c(epiaddgvar,epiaddgcov)
   epidomg <- c(epidomgvar,epidomgcov)
+  matcg <- c(matcgvar)
+  patyg <- c(patygvar)
 
-  indvar <- c("VarE(I)","VarG(Ia)","VarG(Id)","VarG(Ia:a)","VarG(Ia:d)","VarG(Id:d)","VarGs(Ia)")
+  indvar <- c("VarE(I)","VarG(Ia)","VarG(Id)","VarG(Ia:a)","VarG(Ia:d)","VarG(Id:d)","VarGs(Ia)","VarGlm(I)","VarGlp(I)")
   indcov <- NULL  
   # if indcov is NULL matcov is same as allcov
   ind <- c(indvar,indcov)
@@ -44,11 +48,11 @@ function(){
 
   all <- c(allvar,allcov)
 
-  allzpre <- c("zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zc","S","S","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","S","S")
+  allzpre <- c("zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zy","zp","zc","S","S","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","S","S")
 
-  allzpost <- c("zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zc","S","S","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","S","S")
+  allzpost <- c("zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zy","zp","zc","S","S","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","zm","zi","S","S")
 
-  allrel <- c("e","e","a","a","s","s","d","d","aa","aa","ad","ad","dd","dd","I","S","S","e","e","a","a","s","s","d","d","aa","aa","ad","ad","dd","dd","S","S")
+  allrel <- c("e","e","a","a","s","s","d","d","aa","aa","ad","ad","dd","dd","I","I","I","S","S","e","e","a","a","s","s","d","d","aa","aa","ad","ad","dd","dd","S","S")
 
   allindenv <- c("VarE(I)","CovE(I,M)","CovE(M,I)","CovE(I,M&!C)","CovE(M&!C,I)")
 
@@ -58,6 +62,6 @@ function(){
   cohortzpost2 <- c(NA,"zc","zc","zc","zc")
   cohortop <- c(NA,"&","&!","&!","&!")
 
-  ctable <- list(cohortvar=cohortvar, cohortcov=cohortcov, cohort=cohort, evar = evar, ecov=ecov, e=e, addgvar=addgvar, domgvar=domgvar, epiaddgvar=epiaddgvar, epidomgvar=epidomgvar, sexlinaddgvar=sexlinaddgvar, gvar=gvar, allvar=allvar, addgcov=addgcov, domgcov=domgcov, epiaddgcov=epiaddgcov, epidomgcov=epidomgcov, sexlinaddgcov=sexlinaddgcov, gcov=gcov, g=g,  allcov=allcov, addg=addg, domg=domg, epiaddg=epiaddg, epidomg=epidomg, sexlinaddg=sexlinaddg, indvar=indvar, indcov=indcov, ind=ind,  matvar=matvar, matcov=matcov, mat=mat,  all=all, allzpre=allzpre, allzpost=allzpost, allrel=allrel, allindenv=allindenv, cohortzpre1=cohortzpre1, cohortzpost1=cohortzpost1, cohortzpre2=cohortzpre2, cohortzpost2=cohortzpost2, cohortop=cohortop)
+  ctable <- list(cohortvar=cohortvar, cohortcov=cohortcov, cohort=cohort, evar = evar, ecov=ecov, e=e, addgvar=addgvar, domgvar=domgvar, epiaddgvar=epiaddgvar, epidomgvar=epidomgvar, matcgvar=matcgvar, patygvar=patygvar, sexlinaddgvar=sexlinaddgvar, gvar=gvar, allvar=allvar, addgcov=addgcov, domgcov=domgcov, epiaddgcov=epiaddgcov, epidomgcov=epidomgcov, sexlinaddgcov=sexlinaddgcov, gcov=gcov, g=g,  allcov=allcov, addg=addg, domg=domg, epiaddg=epiaddg, epidomg=epidomg, matcg=matcg, patyg=patyg, sexlinaddg=sexlinaddg, indvar=indvar, indcov=indcov, ind=ind,  matvar=matvar, matcov=matcov, mat=mat,  all=all, allzpre=allzpre, allzpost=allzpost, allrel=allrel, allindenv=allindenv, cohortzpre1=cohortzpre1, cohortzpost1=cohortzpost1, cohortzpre2=cohortzpre2, cohortzpost2=cohortzpost2, cohortop=cohortop)
   return(ctable)
 }

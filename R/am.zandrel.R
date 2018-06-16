@@ -52,7 +52,7 @@ function (mdf,df, k, l, x, y, cohortparts, components,specific.components,
   effnames <- names(specific.components) # ie "Sex", "Age", ..
   effcodes <- vector("list",length=nsf)  # effect codes
   comcodes <- vector("list",length=nsf)  # var/cov component codes
-  varcodes <- vector("list",length=nsf)  # car component codes
+  varcodes <- vector("list",length=nsf)  # var component codes
   nsc <- 0   # no of specific components across all factors
   nsvc <- 0  # no of specific var/cov components across all factors
   if(nsf > 0) {
@@ -193,8 +193,6 @@ function (mdf,df, k, l, x, y, cohortparts, components,specific.components,
   }
 
 
-
-
 # Common cohort env effect ( same cohort)
 # All cohort factors must be in df and in cohort formula
 # zc - incidence of measured individuals in cohorts (n x ncohorts)
@@ -253,6 +251,173 @@ function (mdf,df, k, l, x, y, cohortparts, components,specific.components,
                 if(!is.na(cohortcode[i])){ # if cohortcode is present
                   whichcohort <- match(cohortcode[i],levels(cohortcode))
                   zc[[kl]][inrow,whichcohort] <- 1  # set Ind's row and cohort's col 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+# Maternal cytoplasmic lines
+# zy - incidence of measured individuals in maternal cytoplasmic lines (n x nmatclines)
+  nzy <- 1 + nsc
+  zy <- vector("list",length = nzy)
+  names(zy) <- zinames
+# Only make zy$NS if a non-specific cytoplasmic component present
+  if(any(!is.na(match(components,ctable$matcg)))){  # specific matc component check
+    # check if matccodes are on df as a column called "MLine"
+    if(!is.null(df$MLine)) {
+      matccode <- df$MLine
+    }
+    else{
+      matccode <- make.matcline(df)
+    }
+    matccodes <- unique(matccode)
+    nmatccodes <- length(matccodes)
+    cat("no of maternal line codes = ",nmatccodes,"\n")
+# match method - similar to zi and zm
+    inrow <- 0
+    zy$NS <- matrix(0,n,nmatccodes)
+#   miss <- match(dimnames(matccode)[[1]], dimnames(y)[[1]])
+  # miss gives mth matccode[] matches nth y[] value
+    for(i in 1:m){
+      if(!is.na(miss[i])) {
+        inrow <- inrow + 1 # inrow indexes individuals by row in x,y,z
+        for(j in 1:nmatccodes) {
+          zy$NS[inrow,j] <- 0
+        }
+#       if(!is.na(matccode[i])){
+          whichmatcline <- match(matccode[i], matccodes)
+          zy$NS[inrow,whichmatcline] <- 1.0
+#       }
+      }
+    }
+
+    if(nrow(zi$NS) != nrow(zy$NS)) {
+      stop("these must be equal:\n")
+    }
+  }
+
+# Setup zy$... for sex-specific and fixed effect specific cases
+# Only do this if there is a specific cytoplasmic component present
+  if(nsf > 0) {
+    count <- 0
+    for(kf in 1:length(effnames)){
+      if(any(!is.na(match(specific.components[[kf]],ctable$matcg)))){
+        count <- count + 1
+      }
+    }
+    if(count > 0) {
+      #check if matccode is in df as column called "MLine"
+      if(!is.null(df$MLine)) {
+        matccode <- df$MLine
+      }
+      else {
+        matccode <- make.matcline(df)
+      }
+      matccodes <- unique(matccode)
+      nmatccodes <- length(matccodes)
+      cat("no of maternal line codes = ",nmatccodes,"\n")
+
+      kl <- 1  # kl is subscript for zinames
+      for (kf in 1:length(effnames)) {   # kf is factor name
+        for (lc in 1:length(effcodes[[kf]])) {   # lc is codes for factor kf
+          kl <- kl + 1
+          zy[[kl]] <- matrix(0,n,nmatccodes)
+          inrow <- 0
+          for(i in 1:m) {
+            if (!is.na(miss[i])) {
+              inrow <- inrow + 1
+              if(df[i,effnames[kf]] == effcodes[[kf]][lc]) { # if Ind has effcode
+                if(!is.na(matccode[i])){ # if matccode is present
+                  whichmatcline <- match(matccode[i],matccodes)
+                  zy[[kl]][inrow,whichmatcline] <- 1  # set Ind's row and matcline's col 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+# Paternal Y-chromosome  lines
+# zp - incidence of measured individuals in paternal Y-chromosome lines (n x npatylines)
+  nzp <- 1 + nsc
+  zp <- vector("list",length = nzp)
+  names(zp) <- zinames
+# Only make zp$NS if a non-specific paternal-Y component present
+  if(any(!is.na(match(components,ctable$patyg)))){  # specific paty component check
+    # check if patycodes are on df as a column called "PLine"
+    if(!is.null(df$PLine)) {
+      patycode <- df$PLine
+    }
+    else{
+      patycode <- make.patyline(df)
+    }
+    patycodes <- unique(patycode)
+    npatycodes <- length(patycodes)
+    cat("no of paternal line codes = ",npatycodes,"\n")
+# match method - similar to zi and zm
+    inrow <- 0
+    zp$NS <- matrix(0,n,npatycodes)
+#   miss <- match(dimnames(patycode)[[1]], dimnames(y)[[1]])
+  # miss gives mth patycode[] matches nth y[] value
+    for(i in 1:m){
+      if(!is.na(miss[i])) {
+        inrow <- inrow + 1 # inrow indexes individuals by row in x,y,z
+        for(j in 1:npatycodes) {
+          zp$NS[inrow,j] <- 0
+        }
+#       if(!is.na(patycode[i])){
+          whichpatyline <- match(patycode[i], patycodes)
+          zp$NS[inrow,whichpatyline] <- 1.0
+#       }
+      }
+    }
+
+    if(nrow(zi$NS) != nrow(zp$NS)) {
+      stop("these must be equal:\n")
+    }
+  }
+
+# Setup zp$... for sex-specific and fixed effect specific cases
+# Only do this if there is a specific paternal Y-chromosome component present
+  if(nsf > 0) {
+    count <- 0
+    for(kf in 1:length(effnames)){
+      if(any(!is.na(match(specific.components[[kf]],ctable$patyg)))){
+        count <- count + 1
+      }
+    }
+    if(count > 0) {
+      #check if patycode is in df as column called "PLine"
+      if(!is.null(df$PLine)) {
+        patycode <- df$PLine
+      }
+      else {
+        patycode <- make.patyline(df)
+      }
+      patycodes <- unique(patycode)
+      npatycodes <- length(patycodes)
+      cat("no of maternal line codes = ",npatycodes,"\n")
+
+      kl <- 1  # kl is subscript for zinames
+      for (kf in 1:length(effnames)) {   # kf is factor name
+        for (lc in 1:length(effcodes[[kf]])) {   # lc is codes for factor kf
+          kl <- kl + 1
+          zp[[kl]] <- matrix(0,n,npatycodes)
+          inrow <- 0
+          for(i in 1:m) {
+            if (!is.na(miss[i])) {
+              inrow <- inrow + 1
+              if(df[i,effnames[kf]] == effcodes[[kf]][lc]) { # if Ind has effcode
+                if(!is.na(patycode[i])){ # if patycode is present
+                  whichpatyline <- match(patycode[i],patycodes)
+                  zp[[kl]][inrow,whichpatyline] <- 1  # set Ind's row and patyline's col 1
                 }
               }
             }
@@ -350,7 +515,7 @@ function (mdf,df, k, l, x, y, cohortparts, components,specific.components,
 
 
 # construct the am list object
-  am <- list(m=m,n=n,k=k,l=l,v=nnsc + nsvc,x=x,y=y,zi=zi,zm=zm,zc=zc,rel=rel,components=components,specific.components=specific.components,zinames=zinames,effnames=effnames,effcodes=effcodes,effnandc=effnandc,comcodes=comcodes,varcodes=varcodes,nnsc=nnsc,nsc=nsc,nc=nc,nsvc=nsvc)
+  am <- list(m=m,n=n,k=k,l=l,v=nnsc + nsvc,x=x,y=y,zi=zi,zm=zm,zc=zc,zy=zy,zp=zp,rel=rel,components=components,specific.components=specific.components,zinames=zinames,effnames=effnames,effcodes=effcodes,effnandc=effnandc,comcodes=comcodes,varcodes=varcodes,nnsc=nnsc,nsc=nsc,nc=nc,nsvc=nsvc)
  
   return(am)
 }

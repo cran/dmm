@@ -1,3 +1,6 @@
+dmm_2.1-3	In function gresponse() halts because variance.components
+                item is not there in class specific case.
+                Fixed in dmm_2.1-4
 dmm_2.1-1       If VarE(I) ( or other components involving individual
                 environmental effects) is made class specific dmm fails
                 because it attempts to fit inestimble cross-class covariances.

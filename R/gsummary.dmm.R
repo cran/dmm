@@ -2,13 +2,6 @@ gsummary.dmm <-
 function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
 # gsummary.dmm() - make summary tables of genetic parameters for a dmm object
 {
- # check object is a dmm object fully populated
-  if(is.null(dmmobj$variance.components)) {
-    stop("gsummary.dmm: dmm object does not contain item variance.components:\n:")
-  }
-  if(is.null(dmmobj$phenotypic.variance)) {
-    stop("gsummary.dmm: dmm object does not contain item phenotypic.variance:\n")
-  }
 #
   if(!is.null(dmmobj$specific)) {  # class specific case
     retobj <- gsummary.specific(dmmobj,traitset,componentset,bytrait,gls,digits,...)
@@ -16,6 +9,14 @@ function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
   }
 
   else {  # nonspecific case
+    # check object is a dmm object fully populated
+    if(is.null(dmmobj$variance.components)) {
+      stop("gsummary.dmm: dmm object does not contain item variance.components:\n:")
+    }
+    if(is.null(dmmobj$phenotypic.variance)) {
+      stop("gsummary.dmm: dmm object does not contain item phenotypic.variance:\n")
+    }
+    #
      if(traitset[1] == "all"){
       traitpairs <- dimnames(dmmobj$variance.components)[[2]]
       traits <- traitpairstotraits(traitpairs)

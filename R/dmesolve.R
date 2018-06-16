@@ -17,12 +17,12 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
   #     and they must be numeric and class "NULL",
   #     and Id must be sorted in ascending order and without duplicates,
   #     and each DId and SId must occur as an Id,
-  #     as prepared by mdf2() function
+  #     as prepared by mdf() function
   # df must include a matrix of the Y variables which must be called "Ymat"
-  #     as prepared by mdf2() function
+  #     as prepared by mdf() function
   # df must include any X variates or codes mentioned in fixform
   #     and these must be of class "factor" if codes (but not if covariates)
-  #     as prepared by mdf2() function
+  #     as prepared by mdf() function
   # df must include a Sex column if using sex-linked component partitioning
   #     and this must be of class "factor"
   #
