@@ -11,6 +11,10 @@ function(x)
     }
     else {
       lastcolon <- colons[length(colons)]
+      bracket <- which(strsplit(x[i],"")[[1]] == "(")
+      if ( lastcolon > bracket) {
+        lastcolon <- colons[length(colons)-1]
+      }
       gvcname[i] <- substr(x[i],lastcolon+1,nchar(x[i]))
     }
   }

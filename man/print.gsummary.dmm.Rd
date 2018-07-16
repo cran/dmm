@@ -36,7 +36,8 @@ data(sheep.df)
 sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
              sexcode=c("M","F"),relmat=c("E","A"))
 # make a simple fit object - OLS-b only
-sheep.fit1 <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex)
+sheep.fit1 <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,
+   components=c("VarE(I)","VarG(Ia)"))
 # compute a 'gsummary.dmm' object, use all the defaults
 sheep.gsum <- gsummary(sheep.fit1)
 # print the summary of genetic parameters

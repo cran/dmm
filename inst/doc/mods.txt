@@ -1,3 +1,21 @@
+dmm_2.1-5       1. dealt with bug with message
+                Error in if (class1 == class2) { : missing value where 
+                TRUE/FALSE needed
+                concerns class specific analyses only
+                csbug.dmm_2.1-5 branch
+                2. dealt with bug with message
+                Error in match.crosseffect.vars(rownames(siga)[i]) :
+                match.crosseffect.vars() - should never get here:
+                New match.var.nonspecific()   -  case 2
+                    match.cecov.nonspecific()  - case 3
+                    matcf.cecov.specific()  - case 4
+                Modify calls in siga.posdef.specific()
+                                comtopar.specific()
+                Fix genericvarvcnames(), genericvcnames() to accomodate (Ia:a)
+                matchvarbug.dmm_2.1-5 branch
+                3. add component check code to dmesolve()
+                componentcheck.dmm_2.1-5 branch
+
 dmm_2.1-4	added ability to estimate maternal founder  line and
                 paternal founder  line components (VarGml(I) and VarGpl(I))
                 fixed bug in gsummary() introduced in dmm_2.1-3

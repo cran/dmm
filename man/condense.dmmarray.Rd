@@ -46,7 +46,8 @@ data(sheep.df)
 sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
              sexcode=c("M","F"),keep=TRUE)
 # make sheep.fit as a class dmmarray object
-sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,traitspairwise=TRUE)
+sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,
+    components=c("VarE(I)","VarG(Ia)"),traitspairwise=TRUE)
 #  look at one element of the dmmarray
 summary(sheep.fit[["Cww","Diam"]])
 # condense the dmmarray to a class dmm object

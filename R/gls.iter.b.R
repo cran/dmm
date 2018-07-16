@@ -9,6 +9,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
     count <- 0
     degf <- am$n - am$k
     bias <- am$n/degf
+    nsf <- length(am$specific.components)
 
     vmatblock <- matrix(0,am$n * am$n * am$l * am$l, am$v)
     for(iv in 1:am$v) {
@@ -109,7 +110,12 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
 #       cat("Updated siga:\n")
 #       print(siga)
 #  check updated siga posdef
+        if(nsf == 0) {
+          siga <- siga.posdef(siga, am, ctable)
+        }
+        else {
           siga <- siga.posdef.specific(siga, am, ctable)
+        }
 #         cat("Updated siga made positive definite:\n")
 #         print(siga)
 #    look at stopcrit
@@ -252,7 +258,12 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
       }
 
 #  check final siga posdef
-          siga <- siga.posdef.specific(siga, am, ctable)
+      if(nsf == 0) {  # no specific factors
+         siga <- siga.posdef(siga, am, ctable)
+      }
+      else { # some specific components
+         siga <- siga.posdef.specific(siga, am, ctable)
+      }
 #         cat("Final siga made positive definite:\n")
 #         print(siga)
 

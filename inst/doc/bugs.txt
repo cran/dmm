@@ -1,10 +1,27 @@
-dmm_2.1-3	In function gresponse() halts because variance.components
+dmm_2.1-5       1. dealt with bug with message
+                Error in if (class1 == class2) { : missing value where 
+                TRUE/FALSE needed
+                concerns class specific analyses only
+                csbug.dmm_2.1-5 branch
+                2. dealt with bug with message
+                Error in match.crosseffect.vars(rownames(siga)[i]) : 
+                match.crosseffect.vars() - should never get here:
+                matchvarbug.dmm_2.1-5 branch
+                3. add component check code to dmesolve()
+                componentcheck.dmm_2.1-5 branch
+
+dmm_2.1-4	Bring version nos into line
+		Fix gsummary() bug and NAMESPACE issues
+
+dmm_2.1-3	In function gsummary() halts because variance.components
                 item is not there in class specific case.
                 Fixed in dmm_2.1-4
+
 dmm_2.1-1       If VarE(I) ( or other components involving individual
                 environmental effects) is made class specific dmm fails
                 because it attempts to fit inestimble cross-class covariances.
                 Fixed in dmm_2.1-2
+
 dmm_1.5-1	In function mdf() the Sex coding column of the dataframe 'df' is
 		passed to function makeS() of package 'nadiv' as a factor. This
 		causes problems in makeS(). 

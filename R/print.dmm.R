@@ -34,4 +34,7 @@ function(x, traitset="all",gls=F, ...)
     cat("Observed (residual) var/covariance after GLS fit:\n")
     print(x$gls$observed.variance[traits,traits])
   }
+
+  cat("Correlations between columns of W matrix of dyadic model equations:\n")
+  print(round(x$dme.correl,4))
 }

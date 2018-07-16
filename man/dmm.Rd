@@ -17,7 +17,8 @@ dmm(mdf, fixform = Ymat ~ 1, components = c("VarE(I)", "VarG(Ia)"),
     dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline", dmekeep = F,
     dmekeepfit = F, traitspairwise=F, traitsblockwise=F,\dots)
 
-\S3method{dmm}{default}(mdf, fixform = Ymat ~ 1, components = c("VarE(I)", "VarG(Ia)"),
+\S3method{dmm}{default}(mdf, fixform = Ymat ~ 1, 
+    components = c("VarE(I)", "VarG(Ia)"),
     specific.components=NULL, cohortform = NULL, posdef = T, gls = F,
     glsopt = list(maxiter = 200, bdamp = 0.8, stoptol = 0.01),
     dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline", dmekeep = F,
@@ -31,12 +32,17 @@ Either a dataframe or an object of class \code{mdf} which is a list containing a
 A formula specifying the fixed-effect part of the model and the response variate(s). Response should be a matrix for multi-trait models. Default is \code{Ymat ~ 1} that is a response matrix called \code{Ymat} and a fitted mean effect.
 }
   \item{components}{
-A simple vector specifying each of the components to be partitioned from the residual variation after fitting fixed effects. Residual is assumed to be the level of variation attributed to individuals. The components given here are assumed to sum to phenotypic variance so that if there are cross-effect covariances (eg "CovG(Ia,Ma)" and "CovG(Ma,Ia)") they need to be both present. The default is a simple partitioning into individual environmental ("VarE(I)") and individual additive genetic ("VarG(Ia)") variation. It is necessary to actually specify the individual environmental variance, as it is actually fitted as a parameter in the dyadic model, not obtained from residual variation. For a full list of available components see \code{make.ctable()} function. The default is 
-\code{components = c("VarE(I)", "VarG(Ia)")}.
+A simple vector specifying each of the components to be partitioned from the residual variation after fitting fixed effects. Residual is assumed to be the level of variation attributed to individuals. The components given here are assumed to sum to phenotypic variance so that if there are cross-effect covariances (eg "CovG(Ia,Ma)" and "CovG(Ma,Ia)") they need to be both present. The default is \code{c("VarE(I)", "VarG(Ia)")}, that is a simple partitioning into individual environmental ("VarE(I)") and individual additive genetic ("VarG(Ia)") variation. It is  necessary to  specify the individual environmental variance, as it is actually fitted as a parameter in the dyadic model, not obtained from residual variation. For a full list of available components see \code{make.ctable()} function. 
  For a brief introduction to the notation for components see Note section below. For a comprehensive definition of notation see 'dmmOverview.pdf' Section 6.
 }
   \item{specific.components}{
-A list specifying the name of each specific factor and the variance components which are to be specific to that factor. The list takes the form \code{list(Factor1=c(component1,component2,...),Factor2=c(component3,component4,...),...)}. The default is \code{NULL}. Each specific factor must exist as a column in the dataframe. The specific factors do not have to be fitted as fixed effects, but can be. The classes ( ie levels) within each factor must be mutually exclusive, that is, each individual can only belong to one level of each factor. For a full coverage of class specific components see the document \emph{dmmClassSpecific.pdf}.
+A list specifying the name of each specific factor and the variance components which are to be specific to that factor. The list takes the form 
+
+\code{list(Factor1=c(component1,component2,...),Factor2=c(component3,component4,...),...)}. 
+
+The default is \code{NULL}, that is no class specific components are partitioned . Each specific factor must exist as a column in the dataframe. The specific factors do not have to be fitted as fixed effects, but can be. The classes ( ie levels) within each factor must be mutually exclusive, that is, each individual can only belong to one level of each factor. For a full coverage of class specific components see the document \emph{dmmClassSpecific.pdf}.
+
+ If one wishes all of the specified components to be class specific, one needs to specify \code{components=NULL} in order to cancel out the default for the \code{components=} argument.
 }
   \item{cohortform}{
 A formula specifying the effects which define cohort grouping of individuals.  For example \code{cohortform = ~ Year}. A cohort is a grouping of individuals experiencing the same external environmental conditions, eg a group of sheep born and reared together, commonly referred to as a drop. Cohort should not contain DId - the dam's Id. If one needs to consider littermates, function \code{dmm()} provides a means of combining maternal environmental and cohort variance components to achieve this. The default is NULL - ie no cohort defined.
@@ -268,7 +274,8 @@ sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
 
 # a simple model with individual environmenmtal and 
 #    additive genetic components (default)
-sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,gls=TRUE)
+sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,
+   components=c("VarE(I)","VarG(Ia)"),gls=TRUE)
 # view the components and fixed effect coefficients ( 2 traits only)
 summary(sheep.fit,traitset=c("Cww","Diam"),gls=TRUE)
 # view the genetic parameters

@@ -11,8 +11,8 @@ Dyadic mixed model analysis with multi-trait responses and pedigree-based partit
 \tabular{ll}{
 Package: \tab dmm\cr
 Type: \tab Package\cr
-Version: \tab 2.1-4\cr
-Date: \tab 2018-06-16\cr
+Version: \tab 2.1-5\cr
+Date: \tab 2018-07-16\cr
 License: \tab GPL-2 \cr
 }
 This package provides tools for setting up and solving dyadic model equations 
@@ -122,7 +122,8 @@ Other R packages
 library(dmm)
 # simple univariate case, direct from the dataframe
 data(dt8bal.df)
-dt8.fit <- dmm(dt8bal.df, CWW ~ 1 + Sex)  # components not given -> takes the default
+dt8.fit <- dmm(dt8bal.df, CWW ~ 1 + Sex,
+   components=c("VarE(I)","VarG(Ia)"))  
 summary(dt8.fit)  # fixed effect and environmental and additive genetic components
 gsummary(dt8.fit) # heritability with se's
 rm(dt8.fit)

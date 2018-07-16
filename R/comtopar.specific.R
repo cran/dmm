@@ -56,7 +56,7 @@ function(v, l, thisvc,vara, vthisvc, sethisvc, ctable,ic,phencovclass,longrownam
 # case 2
       else {  # cross class covariance
         # need to find corresponding variances
-        varlist <- match.vars(longrownames[i])
+        varlist <- match.var.specific(longrownames[i])
         var1 <- siga[varlist$var1name,]
         var2 <- siga[varlist$var2name,]
 #       var1 <- vc[[varlist$var1class]][varlist$genericname,]
@@ -71,7 +71,7 @@ function(v, l, thisvc,vara, vthisvc, sethisvc, ctable,ic,phencovclass,longrownam
       # covariance component - use crosseffectcovtopar()
       if(!is.specific(longrownames[i]) | is.withinclass(longrownames[i])) { # within-class variance or nonspecific
 
-        varlist <- match.crosseffect.vars(longrownames[i])
+        varlist <- match.cecov.nonspecific(longrownames[i])
         var1 <- siga[varlist$var1name, ]
         var2 <- siga[varlist$var2name, ]
 #       var1 <- vc[[varlist$var1class]][varlist$genericname1, ]
@@ -83,7 +83,7 @@ function(v, l, thisvc,vara, vthisvc, sethisvc, ctable,ic,phencovclass,longrownam
 # case 4
       else { # cross class cross effect cov
         # note if a cross effect cov is cross class, both the correaponding variances must be cross class for the same specific effect
-        varlist <- match.crosseffect.vars(longrownames[i])
+        varlist <- match.cecov.specific(longrownames[i])
         var1 <- siga[varlist$var1name, ]
         var2 <- siga[varlist$var2name, ]
 #       var1 <- vc[[varlist$var1class]][varlist$genericname1, ]

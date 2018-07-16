@@ -12,6 +12,10 @@ function(x)
     }
     else {
       lastcolon <- colons[length(colons)]
+      bracket <- which(strsplit(x[i],"")[[1]] == "(")
+      if ( lastcolon > bracket) {
+        lastcolon <- colons[length(colons)-1]
+      }
       secondcolon <- colons[2]
       gvarvcname[i] <- paste(substr(x[i],1,secondcolon),substr(x[i],lastcolon+1,nchar(x[i])),sep="")
     }

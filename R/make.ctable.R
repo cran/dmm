@@ -43,7 +43,7 @@ function(){
   ind <- c(indvar,indcov)
 
   matvar <- c("VarE(M)","VarG(Ma)","VarG(Md)","VarG(Ma:a)","VarG(Ma:d)","VarG(Md:d)","VarE(M&C)","VarE(M&!C)","VarGs(Ma)")
-  matcov <- c("CovE(I,M)","CovE(M,I)","CovG(Ia,Ma)","CovG(Ma,Ia)","CovG(Id,Md)","CovG(Md,Id)","CovG(Ia:a,Ma:a)","CovG(Ma:a,Ia:a)","CovG(Ia:d,Ma:d)","CovG(Ma:d,Ia:d)","CovG(Id:d,Md:d)","CovG(Md:d,Id:d)","CovG(Ms,Is)",cohortcov,"CovGs(Ia,Ma)","CovGs(Ma,Ia)")
+  matcov <- c("CovE(I,M)","CovE(M,I)","CovG(Ia,Ma)","CovG(Ma,Ia)","CovG(Id,Md)","CovG(Md,Id)","CovG(Ia:a,Ma:a)","CovG(Ma:a,Ia:a)","CovG(Ia:d,Ma:d)","CovG(Ma:d,Ia:d)","CovG(Id:d,Md:d)","CovG(Md:d,Id:d)",cohortcov,"CovGs(Ia,Ma)","CovGs(Ma,Ia)")
   mat <- c(matvar,matcov)
 
   all <- c(allvar,allcov)

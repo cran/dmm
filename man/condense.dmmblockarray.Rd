@@ -47,8 +47,9 @@ data(sheep.df)
 sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
              sexcode=c("M","F"),keep=TRUE)
 # make sheep.fit as a class dmmarray object
-sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,traitsblockwise=TRUE,
-             Block1=c("Cww","Diam"),Block2="Bwt")
+sheep.fit <- dmm(sheep.mdf, Ymat ~ 1 + Year + Sex,
+    components=c("VarE(I)","VarG(Ia)"),traitsblockwise=TRUE,
+    Block1=c("Cww","Diam"),Block2="Bwt")
 #  look at one element of the dmmblockarray
 summary(sheep.fit$array[["Block1","Block2"]])
 # condense the dmmblockarray to a class dmm object

@@ -51,7 +51,7 @@ function(siga, am, ctable,varopt="both",covopt="bound"){
         if(is.crossclass(rownames(siga)[i])) { # cross class variance
 
           # need to find corresponding variances
-          varlist <- match.vars(rownames(siga)[i])
+          varlist <- match.var.specific(rownames(siga)[i])
           var1 <- siga[varlist$var1name,]
           var2 <- siga[varlist$var2name,]
 #         var1 <- vc[[varlist$var1class]][varlist$genericname,]
@@ -89,7 +89,7 @@ function(siga, am, ctable,varopt="both",covopt="bound"){
         # cross-effect covariance - keep correlation in bounds
         if(!is.specific(rownames(siga)[i]) | is.withinclass(rownames(siga)[i])){  # nonspecific or within  class
 
-          varlist <- match.crosseffect.vars(rownames(siga)[i])
+          varlist <- match.cecov.nonspecific(rownames(siga)[i])
           var1 <- siga[varlist$var1name,]
           var2 <- siga[varlist$var2name,]
 #         var1 <- vc[[varlist$var1class]][varlist$genericname1,]
@@ -130,7 +130,7 @@ function(siga, am, ctable,varopt="both",covopt="bound"){
       if(is.cecov(rownames(siga)[i],ctable$allcov)) {  # is a crosseffect cov
         if(is.crossclass(rownames(siga)[i])) {  # is cross-class and a cov
 
-          varlist <- match.crosseffect.vars(rownames(siga)[i])
+          varlist <- match.cecov.specific(rownames(siga)[i])
           var1 <- siga[varlist$var1name,]
           var2 <- siga[varlist$var2name,]
 #         var1 <- vc[[varlist$var1class]][varlist$genericname1,]

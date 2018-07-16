@@ -1,10 +1,12 @@
-match.crosseffect.vars <-
+match.cecov.specific <-
 function(longrowname)
-# match.crosseffect.vars()    - find 2 longnames for vars matching a crosseffect#                               longrowname
+# match.cecov.specific()    - find 2 longnames for vars matching a crosseffect
+#                               longrowname
+#                           - case 4  specific cross-class cross-effect cov
 {
   colons <- which(strsplit(longrowname,"")[[1]] == ":")
   if(length(colons) == 0) {  # nonspecific case never a cross-class cov
-    stop("match.vars() - should never get here:\n")
+    stop("match.cecov.specific() - should never get here:\n")
   }
   else { # specific case
     class1 <- substr(longrowname,colons[1]+1,colons[2]-1)

@@ -25,21 +25,23 @@ function(siga,vsiga,sesiga,am,nsf)
           icno <- icno + 1
           invc[vcno] <- T
           naspec <- rep(F,nsf)
-          for(kf in 1:nsf) {
-            class1 <- substr(phencovclasses[ic],colonp[(kf-1)*3+1]+1,colonp[(kf-1)*3+2]-1)
-            if(kf < nsf) {
-             end2 <- colonp[(kf-1)*3+3]-1
-            }
-            else if ( kf == nsf) {
-             end2 <- nchar(phencovclasses[ic])
-            }
-            class2 <- substr(phencovclasses[ic],colonp[(kf-1)*3+2]+1,end2)
-
-            if(class1 == class2) {
-              naspec[kf] <- T
-            }
-            else {
-              naspec[kf] <- F
+          if(nsf > 0) {
+            for(kf in 1:nsf) {
+              class1 <- substr(phencovclasses[ic],colonp[(kf-1)*3+1]+1,colonp[(kf-1)*3+2]-1)
+              if(kf < nsf) {
+               end2 <- colonp[(kf-1)*3+3]-1
+              }
+              else if ( kf == nsf) {
+               end2 <- nchar(phencovclasses[ic])
+              }
+              class2 <- substr(phencovclasses[ic],colonp[(kf-1)*3+2]+1,end2)
+  
+              if(class1 == class2) {
+                naspec[kf] <- T
+              }
+              else {
+                naspec[kf] <- F
+              }
             }
           }
           navc[vcno] <- all(naspec)
