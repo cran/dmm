@@ -1,3 +1,5 @@
+dmm_2.1-6	NAMESPACE issues repaired
+
 dmm_2.1-5       1. dealt with bug with message
                 Error in if (class1 == class2) { : missing value where 
                 TRUE/FALSE needed

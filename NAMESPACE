@@ -28,7 +28,7 @@ export(
 #  dmm.default
 )
 
-exportClasses(dmm)
+# exportClasses(dmm)
 
 # data
 # export(dt8bal.df,harv103.df,merino.df,quercus.df,sheep.df,tstmo1.df)

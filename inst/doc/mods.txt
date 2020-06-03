@@ -1,3 +1,7 @@
+dmm_2.1-6	NAMESPACE issues
+		dmm-internal.R remove .Random.seed
+		DESCRIPTION add reference to method
+
 dmm_2.1-5       1. dealt with bug with message
                 Error in if (class1 == class2) { : missing value where 
                 TRUE/FALSE needed
