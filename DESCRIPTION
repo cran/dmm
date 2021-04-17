@@ -1,8 +1,8 @@
 Package: dmm
 Type: Package
 Title: Dyadic Mixed Model for Pedigree Data
-Version: 2.1-6
-Date: 2020-06-03
+Version: 2.1-7
+Date: 2021-04-11
 Author: Neville Jackson
 Maintainer: Neville Jackson <nanddjackson@bigpond.com>
 Description: Dyadic mixed model analysis with multi-trait responses and
@@ -15,6 +15,6 @@ Depends: MASS, Matrix, nadiv, robustbase, pls
 Imports: stats, graphics, grDevices
 License: GPL-2 | GPL (>= 2) | GPL-3
 NeedsCompilation: no
-Packaged: 2020-06-03 04:47:17 UTC; nevj
+Packaged: 2021-04-14 09:45:54 UTC; nevj
 Repository: CRAN
-Date/Publication: 2020-06-03 08:30:06 UTC
+Date/Publication: 2021-04-17 10:20:05 UTC

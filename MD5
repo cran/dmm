@@ -1,4 +1,4 @@
-c75c692ff0f112a618aa2412bcb01aa7 *DESCRIPTION
+c9d7ce3ca1db499f1d207e6345b77602 *DESCRIPTION
 bce560789e851d5549c7dcd9c6f2a1ff *NAMESPACE
 ce6653c203043afeacd43dcb8bf536a4 *R/am.arel.R
 02349021a27b5b160680f2868647e28b *R/am.mcrel.R
@@ -102,8 +102,8 @@ dbdca5b4b6efaade87d1d30f70e692c8 *data/sheep.df.rda
 b1d0ac3dd916bdc585b37aa02b5e7da8 *data/tstmo1.df.rda
 7e56e72830f57ea807f3a9399f4a2827 *inst/doc/bugs.txt
 a7103ad0bf64c064ab6ba6ac54a6e228 *inst/doc/dmmClassSpecific.pdf
-da9cc1acf0a6d78773dc221531e13872 *inst/doc/dmmOverview.pdf
-9496e7fd9d1af14b98c3dbdb021caf73 *inst/doc/mods.txt
+f5cc6aa0ccdcd8d8668bc88e7684bca2 *inst/doc/dmmOverview.pdf
+65579571e3ccf31d99d330e8d2de65ef *inst/doc/mods.txt
 9467278a19cec1bb0ec6984e5a3fa5eb *inst/doc/solvedme.pdf
 35b59cdf268e44bd6d81a195394536f2 *man/chartodec.Rd
 723156219715420508ad456a0c596ed4 *man/condense.dmmarray.Rd
@@ -131,7 +131,7 @@ ffb2f1f47d1e13dd4d02b620dec99e82 *man/print.csummary.dmm.Rd
 73c71564ab7b527e1f976f935fe755d2 *man/print.gresponse.dmm.Rd
 128ec48ae2aac0a102022f1a26ac4d1b *man/print.gsummary.dmm.Rd
 63936b54c4948292bce4b8a9284d54e7 *man/print.summary.dmm.Rd
-58fed787f5919b85afd1d7e4417b4840 *man/quercus.df.Rd
+61a88d1c9f4f81eed8943d6643c2f90e *man/quercus.df.Rd
 bb1da0b44dfa5f8e785b4f97baf42795 *man/sheep.df.Rd
 299b4c2916842dde1d778851c74ccd7d *man/summary.dmm.Rd
 cfecffd68ecf61b41daac76682219a1a *man/summary.gresponse.dmm.Rd

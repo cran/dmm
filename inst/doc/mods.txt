@@ -1,3 +1,6 @@
+dmm_2.1-7	Note on use of Openblas libraries added to dmmOverview.pdf
+		Fix http -> https in url's
+
 dmm_2.1-6	NAMESPACE issues
 		dmm-internal.R remove .Random.seed
 		DESCRIPTION add reference to method
