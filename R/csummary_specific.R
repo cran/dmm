@@ -1,6 +1,6 @@
-csummary.specific <-
+csummary_specific <-
 function(object,traitset,componentset,bytrait,gls,digits,...)
-# csummary.specific() - summarize component estimates for specific case
+# csummary_specific() - summarize component estimates for specific case
 {
     if(traitset[1] == "all"){
       traitpairs <- dimnames(object$siga)[[2]]

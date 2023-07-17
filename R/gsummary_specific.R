@@ -1,6 +1,6 @@
-gsummary.specific <-
+gsummary_specific <-
 function(dmmobj,traitset,componentset,bytrait,gls,digits,...)
-# gsummary.specific() - summarize component estimates for specific case
+# gsummary_specific() - summarize component estimates for specific case
 {
     if(traitset[1] == "all"){
       traitpairs <- dimnames(dmmobj$siga)[[2]]

@@ -72,7 +72,7 @@ function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = NULL,
     cat("No of rows with Id == NA removed from dataframe = ",nona,"\n")
 #
 # Remove duplicate Id's
-    df3 <- df2[!duplicated(df2$Id) & !duplicated.first(df2$Id), ]
+    df3 <- df2[!duplicated(df2$Id) & !duplicated_first(df2$Id), ]
     nodup <- length(df2$Id) - length(df3$Id)
     cat("No of rows with duplicated Id removed from dataframe = ",nodup,"\n")
     cat("No of rows remaining after duplicates and NA's removed = ",nrow(df3),"\n")
@@ -163,6 +163,11 @@ function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = NULL,
       return(mdf)
     }
     else {
+      cat("mdf use of nadiv() is temporarily disabled  due to problems with Matrix 1.6.0:\n")
+      cat("Use relmat=\"inline\" option with dmm() to get additive relationship matrix:\n")
+      cat("Non additive relationship matrices can not be generated at moment:\n") 
+      return(mdf)
+
       # setup for nadiv()
       cat("Setup pedigree for nadiv():\n")
       ped <- matrix(0,length(mdf$Id),3)

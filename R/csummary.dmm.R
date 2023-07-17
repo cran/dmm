@@ -4,7 +4,7 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
 {
 
   if(!is.null(object$specific)) {  # specific
-    retobj <- csummary.specific(object,traitset,componentset,bytrait,gls,digits,...)
+    retobj <- csummary_specific(object,traitset,componentset,bytrait,gls,digits,...)
     class(retobj) <- "csumspecific.dmm"
     return(retobj)
   } #  end if specific

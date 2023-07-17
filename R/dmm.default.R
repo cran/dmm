@@ -14,13 +14,13 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
   }
   else if(traitspairwise) {
     cat("Traitspairwise mixed model fit for datafile:",substitute(mdf)," \n")
-    outlist <- dmm.array(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
+    outlist <- dmm_array(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
     attributes(outlist) <- c(attributes(outlist),list(call = match.call()))
 #   class(outlist) <- "dmmarray"
   }
   else if(traitsblockwise) {
     cat("Traitsblockwise mixed model fit for datafile:",substitute(mdf)," \n")
-    outlist <- dmm.blockarray(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit,...)
+    outlist <- dmm_blockarray(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit,...)
     attributes(outlist) <- c(attributes(outlist),list(call = match.call()))
 #   class(outlist) <- "dmmblockarray"
   }

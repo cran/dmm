@@ -1,6 +1,6 @@
-dmm.blockarray <-
+dmm_blockarray <-
 function(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit,...)
-#  dmm.blockarray()   - do traits in pairs of blocks of traits
+#  dmm_blockarray()   - do traits in pairs of blocks of traits
 #                    - return dmmblockarray object
 {
   if(is.null(mdf$rel)) {

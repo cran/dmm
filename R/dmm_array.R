@@ -1,6 +1,6 @@
-dmm.array <-
+dmm_array <-
 function(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
-# dmm.array()   -   do the traits pairwise and return a dmmarray object
+# dmm_array()   -   do the traits pairwise and return a dmmarray object
 {
   if(is.null(mdf$rel)) {
     df <- mdf

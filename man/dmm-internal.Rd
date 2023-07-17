@@ -13,7 +13,7 @@
 \alias{covt}
 \alias{crossclasscovtopar}
 \alias{crosseffectcovtopar}
-\alias{csummary.specific}
+\alias{csummary_specific}
 \alias{dae.nonspecific.I}
 \alias{dae.nonspecific}
 \alias{dae.nonspecific.S}
@@ -21,9 +21,9 @@
 \alias{dae.specific}
 \alias{dae.specific.S}
 \alias{dmesolve}
-\alias{dmm.array}
-\alias{dmm.blockarray}
-\alias{duplicated.first}
+\alias{dmm_array}
+\alias{dmm_blockarray}
+\alias{duplicated_first}
 \alias{dyad.am.expect}
 \alias{expect.v}
 \alias{fixpaste}
@@ -31,7 +31,7 @@
 \alias{genericvcnames}
 \alias{gls.b.gmat}
 \alias{gls.iter.b}
-\alias{gsummary.specific}
+\alias{gsummary_specific}
 \alias{is.cecov}
 \alias{is.crossclass}
 \alias{is.specific}
@@ -82,7 +82,7 @@ covtopar(covg, covt)
 covt(v, l, vsiga, il, jl, kl)
 crossclasscovtopar(covx, covt, var1, var2)
 crosseffectcovtopar(covx, covt, varcomp, var1, var2)
-csummary.specific(object, traitset, componentset, bytrait, gls, digits, ...)
+csummary_specific(object, traitset, componentset, bytrait, gls, digits, ...)
 dae.nonspecific.I(zpre, zpost, mmat, componentname, cnames, cnamesie,
      emat, vmat, icol, iecol, gls)
 dae.nonspecific(zpre, rel, zpost, mmat, componentname, cnames, cnamesie,
@@ -103,11 +103,11 @@ dmesolve(mdf, fixform = Ymat ~ 1, components = c("VarE(I)", "VarG(Ia)"),
      glsopt = list(maxiter = 200, bdamp = 0.8, stoptol = 0.01),
      dmeopt = "qr", ncomp.pcr = "rank", relmat = "inline",
      dmekeep = F, dmekeepfit = F)
-dmm.array(mdf, fixform, components, specific.components, cohortform,
+dmm_array(mdf, fixform, components, specific.components, cohortform,
      posdef, gls, glsopt, dmeopt, ncomp.pcr, relmat, dmekeep, dmekeepfit)
-dmm.blockarray(mdf, fixform, components, specific.components, cohortform,
+dmm_blockarray(mdf, fixform, components, specific.components, cohortform,
      posdef, gls, glsopt, dmeopt, ncomp.pcr, relmat, dmekeep, dmekeepfit, ...)
-duplicated.first(x)
+duplicated_first(x)
 dyad.am.expect(am, gls, dmeopt)
 expect.v(am, siga, dme.explist)
 fixpaste(x, fix)
@@ -116,7 +116,7 @@ genericvcnames(x)
 gls.b.gmat(am, vinv, dme.explist, vmatblock)
 gls.iter.b(am, start.b, start.siga, dyad.explist, glsopt, dmeopt, ctable,
      ncomp.pcr, dmekeepfit)
-gsummary.specific(dmmobj, traitset, componentset, bytrait, gls, digits, ...)
+gsummary_specific(dmmobj, traitset, componentset, bytrait, gls, digits, ...)
 is.cecov(x, allcovs)
 is.crossclass(x)
 is.specific(x)

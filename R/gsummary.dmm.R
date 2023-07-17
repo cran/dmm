@@ -4,7 +4,7 @@ function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
 {
 #
   if(!is.null(dmmobj$specific)) {  # class specific case
-    retobj <- gsummary.specific(dmmobj,traitset,componentset,bytrait,gls,digits,...)
+    retobj <- gsummary_specific(dmmobj,traitset,componentset,bytrait,gls,digits,...)
     return(retobj)
   }
 

@@ -23,7 +23,8 @@ Example dataset from the program package 'QUERCUS', developed by Ruth G. Shaw an
 This is a simulated dataset suitable for a 3-component analysis, the components being environmental variance, additive genetic variance, and dominance genetic variance. It needs pre-processing with function \code{mdf()} to add base animals, to combine the two traits into a matrix, and to calculate additive and dominance relationship matrices.
 }
 \source{
-\url{https://cbs.umn.edu/academics/departments/eeb/quercus}
+\url{https://cbs.umn.
+edu/eeb/about-eeb/helpful-links/quercus-quantitative-genetics-software}
 }
 \examples{
 library(dmm)

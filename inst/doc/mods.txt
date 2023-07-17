@@ -1,3 +1,5 @@
+dmm_2.1-8	Temporary disable of use of nadiv() die to Matrix1.6-0
+
 dmm_2.1-7	Note on use of Openblas libraries added to dmmOverview.pdf
 		Fix http -> https in url's
 
