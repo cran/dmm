@@ -169,71 +169,71 @@ function (df, pedcols = c(1:3), factorcols = NULL, ycols = NULL, sexcode = NULL,
       return(mdf)
 
       # setup for nadiv()
-      cat("Setup pedigree for nadiv():\n")
-      ped <- matrix(0,length(mdf$Id),3)
-      ped2 <- matrix(0,length(mdf$Id),4)
-      ped[,1] <- mdf[,"Id"]
-      ped[,2] <- mdf[,"DId"]
-      ped[,3] <- mdf[,"SId"]
-      ped2[,1:3] <- ped
-      if(sexcharacter) {
-        ped2[,4] <- as.character(mdf[,"Sex"])
-      }
-      else {
-        ped2[,4] <- as.numeric(as.character(mdf[,"Sex"]))
-      }
-      dimnames(ped2)[[2]] <- c("ID","Dam","Sire","Sex")
-      dimnames(ped)[[2]] <- c("ID","Dam","Sire")
-      cat("Make relationship matrices:\n")
-      a <- NULL
-      aa <- NULL
-      d <- NULL
-      ad <- NULL
-      dd <- NULL
-      s <- NULL
-      dsim <- NULL
-      e <- NULL
-      if(any(relmat == "E")) {
-        e <- Diagonal(length(mdf$Id))
-      }
-      if(any(relmat == "A")){
-        a <- makeA(ped)
-      }
-      if(any(relmat == "AA")){
-        aa <- makeAA(ped)$AA
-      }
-      if(any(relmat == "D")) {
-        d <- makeD(ped,invertD=F)$D
-      }
-      if(any(relmat == "Dsim")) {
-        dsim <- makeDsim(ped,N=1000,invertD=F)$D
-      }
-      if(any(relmat == "AD")){
-        ad <- makeDomEpi(ped,output="AD",invertD=F)$AD
-      }
-      if(any(relmat == "DD")){
-        dd <- makeDomEpi(ped,output="DD",invertD=F)$DD
-      }
-      if(any(relmat == "S")){
-        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="ngdc")$S
-      }
-      if(any(relmat == "S.hori")){
-        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hori")$S
-      }
-      if(any(relmat == "S.hedo")){
-        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hedo")$S
-      }
-      if(any(relmat == "S.hoha")){
-        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hoha")$S
-      }
-      if(any(relmat == "S.hopi")){
-        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hopi")$S
-      }
-      cat("Return mdf as an object of class mdf:\n")
-      cat(" containing the dataframe as mdf$df:\n")
-      cat(" and the relationship matrices as mdf$rel:\n")
-      outlist <- list(df=mdf,rel=list(e=e,a=a,aa=aa,d=d,dsim=dsim,ad=ad,dd=dd,s=s))
-      class(outlist) <- "mdf"
-      return(outlist)
+#      cat("Setup pedigree for nadiv():\n")
+#      ped <- matrix(0,length(mdf$Id),3)
+#      ped2 <- matrix(0,length(mdf$Id),4)
+#      ped[,1] <- mdf[,"Id"]
+#      ped[,2] <- mdf[,"DId"]
+#      ped[,3] <- mdf[,"SId"]
+#      ped2[,1:3] <- ped
+#      if(sexcharacter) {
+#        ped2[,4] <- as.character(mdf[,"Sex"])
+#      }
+#      else {
+#        ped2[,4] <- as.numeric(as.character(mdf[,"Sex"]))
+#      }
+#      dimnames(ped2)[[2]] <- c("ID","Dam","Sire","Sex")
+#      dimnames(ped)[[2]] <- c("ID","Dam","Sire")
+#      cat("Make relationship matrices:\n")
+#      a <- NULL
+#      aa <- NULL
+#      d <- NULL
+#      ad <- NULL
+#      dd <- NULL
+#      s <- NULL
+#      dsim <- NULL
+#      e <- NULL
+#      if(any(relmat == "E")) {
+#        e <- Diagonal(length(mdf$Id))
+#      }
+#      if(any(relmat == "A")){
+#        a <- makeA(ped)
+#      }
+#      if(any(relmat == "AA")){
+#        aa <- makeAA(ped)$AA
+#      }
+#      if(any(relmat == "D")) {
+#        d <- makeD(ped,invertD=F)$D
+#      }
+#      if(any(relmat == "Dsim")) {
+#        dsim <- makeDsim(ped,N=1000,invertD=F)$D
+#      }
+#      if(any(relmat == "AD")){
+#        ad <- makeDomEpi(ped,output="AD",invertD=F)$AD
+#      }
+#      if(any(relmat == "DD")){
+#        dd <- makeDomEpi(ped,output="DD",invertD=F)$DD
+#      }
+#      if(any(relmat == "S")){
+#        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="ngdc")$S
+#      }
+#      if(any(relmat == "S.hori")){
+#        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hori")$S
+#      }
+#      if(any(relmat == "S.hedo")){
+#        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hedo")$S
+#      }
+#      if(any(relmat == "S.hoha")){
+#        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hoha")$S
+#      }
+#      if(any(relmat == "S.hopi")){
+#        s <- makeS(ped2,heterogametic=sexcode[1],returnS=T,DosageComp="hopi")$S
+#      }
+#      cat("Return mdf as an object of class mdf:\n")
+#      cat(" containing the dataframe as mdf$df:\n")
+#      cat(" and the relationship matrices as mdf$rel:\n")
+#      outlist <- list(df=mdf,rel=list(e=e,a=a,aa=aa,d=d,dsim=dsim,ad=ad,dd=dd,s=s))
+#      class(outlist) <- "mdf"
+#      return(outlist)
     }
 }

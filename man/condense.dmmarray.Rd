@@ -15,7 +15,7 @@ An object of class \code{dmmarray}
 }
 }
 \details{
-In bringing together the results of several \code{traitspairwise} analyses into a single matrix of (for example) individual additive genetic variance/covariance components, one is putting together into one matrix elements estimated with different precisions due to differnt replication for each pair of traits. The resulting matrix may not be positive definite even if all the contributing \code{traitspairwise} 2 x 2 matrices are forced positive definite. 
+In bringing together the results of several \code{traitspairwise} analyses into a single matrix of (for example) individual additive genetic variance/covariance components, one is putting together into one matrix elements estimated with different precisions due to differnt replication for each pair of traits. The resulting matrix may not be positive definite even if all the contributing traitspairwise 2 x 2 matrices are forced positive definite. 
 
 If the argument \code{da} contains results from a \code{dmm} run with \code{gls=T} then the GLS results for each traitpair will also be condensed. In this case the GLS results must be present for every traitpair. It can be quite difficult to get \code{gls=T} runs to converge successfully for every trait pair.
 }
@@ -41,7 +41,8 @@ Functions \code{dmm()}, \code{condense.dmmblockarray()}
 library(dmm)
 # prepare the dataset sheep.df
 data(sheep.df)
-# add a matrix 'Ymat' to the dataframe, which is required for traitspairwise
+# add a matrix 'Ymat' to the dataframe,
+#    which is required for traitspairwise
 # keep=TRUE is required
 sheep.mdf <- mdf(sheep.df,pedcols=c(1:3),factorcols=c(4:6),ycols=c(7:9),
              sexcode=c("M","F"),keep=TRUE)
@@ -53,7 +54,8 @@ summary(sheep.fit[["Cww","Diam"]])
 # condense the dmmarray to a class dmm object
 sheep.condense <- condense.dmmarray(sheep.fit)
 # compute a response to selection
-sheep.resp <- gresponse(sheep.condense,psd=list(dp=c(1,1,1)),effects=c("G(Ia)"))
+sheep.resp <- gresponse(sheep.condense,
+       psd=list(dp=c(1,1,1)),effects=c("G(Ia)"))
 # look at response object
 summary(sheep.resp)
 #cleanup

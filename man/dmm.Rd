@@ -38,7 +38,9 @@ A simple vector specifying each of the components to be partitioned from the res
   \item{specific.components}{
 A list specifying the name of each specific factor and the variance components which are to be specific to that factor. The list takes the form 
 
-\code{list(Factor1=c(component1,component2,...),Factor2=c(component3,component4,...),...)}. 
+\code{list(Factor1=c(component1,component2,...),} 
+
+\code{     Factor2=c(component3,component4,...),...)}. 
 
 The default is \code{NULL}, that is no class specific components are partitioned . Each specific factor must exist as a column in the dataframe. The specific factors do not have to be fitted as fixed effects, but can be. The classes ( ie levels) within each factor must be mutually exclusive, that is, each individual can only belong to one level of each factor. For a full coverage of class specific components see the document \emph{dmmClassSpecific.pdf}.
 

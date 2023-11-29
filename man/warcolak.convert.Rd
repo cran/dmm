@@ -44,12 +44,12 @@ Functions \code{dmm()}, \code{mdf()}. Package \code{nadiv}.
 }
 \examples{
 
-library(dmm)
-data(warcolak)
-warcolak.df <- warcolak.convert(warcolak)
-str(warcolak.df)
-rm(warcolak.df)
-rm(warcolak)
+#library(dmm)
+#data(warcolak)
+#warcolak.df <- warcolak.convert(warcolak)
+#str(warcolak.df)
+#rm(warcolak.df)
+#rm(warcolak)
 
 }
 \keyword{ manip }
