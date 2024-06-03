@@ -1,5 +1,5 @@
-9e4c140324fceb4b60cc572534a29447 *DESCRIPTION
-97fb0947c06d462d0a36893d31e4121f *NAMESPACE
+a866821cf09aa58d3115dacfed5e3855 *DESCRIPTION
+4d997260d334d750ae460f33a8a772cf *NAMESPACE
 ce6653c203043afeacd43dcb8bf536a4 *R/am.arel.R
 02349021a27b5b160680f2868647e28b *R/am.mcrel.R
 902a79e6a592e9cd43f3017c28bc34eb *R/am.pyrel.R
@@ -63,7 +63,7 @@ dbfabd45786bea437f2e6c081419a186 *R/make.matcline.R
 f08882cee2056a5e2241e1f344617855 *R/match.cecov.nonspecific.R
 4c6090ee21fd89443f6905ef2850ce76 *R/match.cecov.specific.R
 627ff5e5136bb5d4c9a47c8b292d6128 *R/match.var.specific.R
-1d201263119124723364a6317a6d9535 *R/mdf.R
+a4599450900aeb528b703f8ff1fbf604 *R/mdf.R
 038dd2e8491c4b9fe7be51812f2978f7 *R/part.add.R
 f2c19ec1110ab65c784e1e4c1bb9e675 *R/partocov.R
 c90fdaea91140df88c265e8f27ac1b76 *R/pedcheck.R
@@ -100,10 +100,10 @@ cea5db7213ef6149a899da67a991da60 *R/summary.gresponse.dmm.R
 2c61472b5734a760af671698e716d88c *data/quercus.df.rda
 dbdca5b4b6efaade87d1d30f70e692c8 *data/sheep.df.rda
 b1d0ac3dd916bdc585b37aa02b5e7da8 *data/tstmo1.df.rda
-09ae27c81227c0beea2241f62437553b *inst/doc/bugs.txt
-5a84561a8f35bd1f93eeca014094a299 *inst/doc/dmmClassSpecific.pdf
-8e7e209f304ed82634305b1b1ddd962c *inst/doc/dmmOverview.pdf
-0e88fd54313f9724df289002db1b87d0 *inst/doc/mods.txt
+fc663e35c443dc8894ce241167e743a0 *inst/doc/bugs.txt
+d117fb33e56b405a9551f449ae10f003 *inst/doc/dmmClassSpecific.pdf
+0ec971ec81e21f9b6262eef8c885a987 *inst/doc/dmmOverview.pdf
+eb6c23c9dc3cfe7b21465a53afb7bf78 *inst/doc/mods.txt
 393a16b7534bcb68bf67da0e27d1099f *inst/doc/solvedme.pdf
 35b59cdf268e44bd6d81a195394536f2 *man/chartodec.Rd
 3acb73bad2076e0a87b3e7d0352e429e *man/condense.dmmarray.Rd

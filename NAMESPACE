@@ -53,7 +53,7 @@ S3method(gprint,dmm)
 S3method(dmm,default)
 
 # import dependencies
-import(MASS,Matrix,robustbase,pls)
+import(MASS,Matrix,robustbase,pls,nadiv)
 
 importFrom("graphics", "hist", "mtext", "par")
 importFrom("grDevices", "devAskNewPage")

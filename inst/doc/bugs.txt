@@ -1,3 +1,5 @@
+dmm_2.1-10	Restore nadiv() as dependency. mdf() restored.
+
 dmm_2.1-9	Temporarily remove nadiv() as dependency
 
 dmm_2.1-8	nadiv() has issues with Matrix 1.6-0
