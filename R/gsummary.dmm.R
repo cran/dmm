@@ -1,10 +1,10 @@
 gsummary.dmm <-
-function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
+function(dmmobj,traitset="all",componentset="all",bytrait=T,fixedgls=F,digits=3, ...)
 # gsummary.dmm() - make summary tables of genetic parameters for a dmm object
 {
 #
   if(!is.null(dmmobj$specific)) {  # class specific case
-    retobj <- gsummary_specific(dmmobj,traitset,componentset,bytrait,gls,digits,...)
+    retobj <- gsummary_specific(dmmobj,traitset,componentset,bytrait,fixedgls,digits,...)
     return(retobj)
   }
 
@@ -103,9 +103,9 @@ function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
                          CI95lo=ci95lo,CI95hi=ci95hi)
     ptables[[1]] <- ptable
 
-    retobj <- list(ftables=ftables, rtables=rtables, ptables=ptables, traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+    retobj <- list(ftables=ftables, rtables=rtables, ptables=ptables, traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
 
-    if(gls) {
+    if(fixedgls) {
     if(bytrait) {
       gftables <- vector("list",l)  # one table per trait
       count <- 0
@@ -174,7 +174,7 @@ function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
                          CI95lo=ci95lo,CI95hi=ci95hi)
     gptables[[1]] <- ptable
   
-    retobj <- list(ftables=ftables,rtables=rtables,ptables=ptables,gftables=gftables,grtables=grtables,gptables=gptables,traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+    retobj <- list(ftables=ftables,rtables=rtables,ptables=ptables,gftables=gftables,grtables=grtables,gptables=gptables,traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
     }
   
     retobj$call <- match.call()

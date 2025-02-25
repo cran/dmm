@@ -8,7 +8,7 @@ Extracts the (co)variance component and fixed effect estimates from an object of
 }
 \usage{
 \S3method{summary}{dmm}(object, traitset = "all", componentset = "all", bytrait = T,
-            gls = F, digits = 3, ...)
+            fixedgls = F, digits = 3, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,8 +24,8 @@ A vector containing the names of the subset of (co)variance components for which
   \item{bytrait}{
 Logical flag: should the tables of (co)variance component estimates be constructed with trait varying least rapidly from line to line? If TRUE each subtable contains component estimates for one trait or traitpair and for all components in argument \code{componentset}. If FALSE each subtable contains component estimates for one component and for all traits or traitpairs.
 }
-  \item{gls}{
-Logical flag: should the (co)variance component estimates by GLS-b method be tabled in addition to the (co)variance component estimates by OLS-b method? Default is \code{gls=FALSE}. The GLS-b (co)variance component estimates can only be tabled if object \code{object} contains the attribute \code{gls}, that is if \code{object} was constructed by a \code{dmm()} call with argument \code{gls=TRUE}.
+  \item{fixedgls}{
+Logical flag: should the (co)variance component estimates by GLS-b method be tabled in addition to the (co)variance component estimates by OLS-b method? Default is \code{fixedgls=FALSE}. The GLS-b (co)variance component estimates can only be tabled if object \code{object} contains the attribute \code{fixedgls}, that is if \code{object} was constructed by a \code{dmm()} call with argument \code{fixedgls=TRUE}.
 }
   \item{digits}{
 Number of digits for output. This is returned as part of the return value for us
@@ -50,11 +50,11 @@ items:
 \item{btables}{A list of dataframe objects each containing one subtable of estimates of the fixed effects, along with the appropriate standard errors and confidence limits. Based on OLS-b fixed effect estimates.}
 \item{ctables}{A list of dataframe objects each containing one subtable of estimates of the (co)variance components, along with the appropriate standard errors and confidence limits. Based on OLS-b component estimates.}
 \item{gbtables}{A list of dataframe objects each containing one subtable of estimates of the fixed effects, along with the appropriate standard errors and confidence limits. Based on GLS-b fixed effect estimates.}
-\item{gctables}{A list of dataframe objects each containing one subtable of estimates of the (co)variance components, along with the appropriate standard errors and confidence limits. Based on GLS-b component estimates. Only present if argument \code{gls=TRUE}.}
+\item{gctables}{A list of dataframe objects each containing one subtable of estimates of the (co)variance components, along with the appropriate standard errors and confidence limits. Based on GLS-b component estimates. Only present if argument \code{fixedgls=TRUE}.}
 \item{traits}{A vector of traitnames as specified in argument \code{traitset}.}
 \item{components}{A vector of component names as specified in argument \code{componentset}.}
 \item{bytrait}{Logical flag: as specified in argument \code{bytrait}.}
-\item{gls}{Logical flag: as specified in argument \code{gls}.}
+\item{fixedgls}{Logical flag: as specified in argument \code{fixedgls}.}
 \item{digits}{A numeric value, as specified in argument \code{digits}.}
 \item{call}{The function call}
 }

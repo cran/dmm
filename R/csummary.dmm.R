@@ -1,10 +1,10 @@
 csummary.dmm <-
-function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
+function(object,traitset="all",componentset="all",bytrait=T,fixedgls=F,digits=3, ...)
 # csummary.dmm()  - make component summary tables for a dmm object
 {
 
   if(!is.null(object$specific)) {  # specific
-    retobj <- csummary_specific(object,traitset,componentset,bytrait,gls,digits,...)
+    retobj <- csummary_specific(object,traitset,componentset,bytrait,fixedgls,digits,...)
     class(retobj) <- "csumspecific.dmm"
     return(retobj)
   } #  end if specific
@@ -63,9 +63,9 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
        ctables[[count]] <- ctable
     }
   }
-  retobj <- list(ctables=ctables,traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+  retobj <- list(ctables=ctables,traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
 
-  if(gls) {
+  if(fixedgls) {
   if(bytrait) {
 
     gctables <- vector("list",l*l)  # one table per traitpair
@@ -100,7 +100,7 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
        gctables[[count]] <- ctable
     }
   }
-  retobj <- list(ctables=ctables,gctables=gctables,traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+  retobj <- list(ctables=ctables,gctables=gctables,traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
   }
 
   retobj$call <- match.call()

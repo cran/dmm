@@ -9,7 +9,7 @@ Extracts the genetic parameters from an object of class \code{dmm}, for the spec
 }
 \usage{
 \S3method{gsummary}{dmm}(dmmobj, traitset = "all", componentset = "all", bytrait = T,
-                    gls = F, digits = 3, ...)
+                    fixedgls = F, digits = 3, ...)
 }
 \arguments{
   \item{dmmobj}{
@@ -24,8 +24,8 @@ A vector containing the names of the subset of (co)variance components for which
   \item{bytrait}{
 Logical flag: should the tables of genetic parameters be constructed with trait varying least rapidly from line to line? If TRUE each subtable contains parameters for one trait or traitpair and for all components. If FALSE each subtable contains parameters for one component and for all traits or traitpairs.
 }
-  \item{gls}{
-Logical flag: should the parameter estimates by GLS-b method be tabled in addition to the parameter estimates by OLS-b method? Default is \code{gls=FALSE}. The GLS-b parameters can only be tabled if object \code{dmmobj} contains the attribute \code{gls}, that is if \code{dmmobj} was constructed by a \code{dmm()} call with argument \code{gls=TRUE}.
+  \item{fixedgls}{
+Logical flag: should the parameter estimates by GLS-b method be tabled in addition to the parameter estimates by OLS-b method? Default is \code{fixedgls=FALSE}. The GLS-b parameters can only be tabled if object \code{dmmobj} contains the attribute \code{fixedgls}, that is if \code{dmmobj} was constructed by a \code{dmm()} call with argument \code{fixedgls=TRUE}.
 }
   \item{digits}{
 Number of digits for output. This is returned as part of the return value for use by the S3 print function \code{print.gsummary.dmm()}.
@@ -42,13 +42,13 @@ An object of class \code{gsummary.dmm} which is a list containing the following 
 \item{ftables}{A list of dataframe objects each containing one subtable of estimates of the proportion of variance attributable to components, along with the appropriate standard errors and confidence limits. Based on OLS-b component estimates.}
 \item{rtables}{A list of dataframe objects each containing one subtable of estimates of the correlation coefficient attributable to components, along with the appropriate standard errors and confidence limits. Based on OLS-b component estimates.}
 \item{ptables}{A single dataframe object containing estimates of the phenotypic (co)variance. Note that these are based on all components, even if a subset of components is specified in argument \code{componentset}. Based on OLS-b component estimates.}
-\item{gftables}{A list of dataframe objects each containing one subtable of estimates of the proportion of variance attributable to components, along with the appropriate standard errors and confidence limits. Based on GLS-b component estimates. Only present if argument \code{gls=TRUE}.}
-\item{grtables}{A list of dataframe objects each containing one subtable of estimates of the correlation coefficient attributable to components, along with the appropriate standard errors and confidence limits. Based on GLS-b component estimates. Only present if argument \code{gls=TRUE}.}
-\item{gptables}{A single dataframe object containing estimates of the phenotypic (co)variance. Note that these are based on all components, even if a subset of components is specified in argument \code{componentset}. Based on GLS-b component estimates. Only present if argument \code{gls=TRUE}.}
+\item{gftables}{A list of dataframe objects each containing one subtable of estimates of the proportion of variance attributable to components, along with the appropriate standard errors and confidence limits. Based on GLS-b component estimates. Only present if argument \code{fixedgls=TRUE}.}
+\item{grtables}{A list of dataframe objects each containing one subtable of estimates of the correlation coefficient attributable to components, along with the appropriate standard errors and confidence limits. Based on GLS-b component estimates. Only present if argument \code{fixedgls=TRUE}.}
+\item{gptables}{A single dataframe object containing estimates of the phenotypic (co)variance. Note that these are based on all components, even if a subset of components is specified in argument \code{componentset}. Based on GLS-b component estimates. Only present if argument \code{fixedgls=TRUE}.}
 \item{traits}{A vector of traitnames as specified in argument \code{traitset}.}
 \item{components}{A vector of component names as specified in argument \code{componentset}.}
 \item{bytrait}{Logical flag: as specified in argument \code{bytrait}.}
-\item{gls}{Logical flag: as specified in argument \code{gls}.}
+\item{fixedgls}{Logical flag: as specified in argument \code{fixedgls}.}
 \item{digits}{A numeric value, as specified in argument \code{digits}.}
 \item{call}{The function call}
 }

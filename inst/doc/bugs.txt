@@ -1,3 +1,8 @@
+dmm_3.1-1       Major release including the dmeopt="fgls"  option which allows REML
+                estimates of variance components.
+i		No bug fixes in this release.
+		Multivariate REML is flagged as experimental.
+
 dmm_2.1-10	Restore nadiv() as dependency. mdf() restored.
 
 dmm_2.1-9	Temporarily remove nadiv() as dependency

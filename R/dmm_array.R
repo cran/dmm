@@ -1,5 +1,5 @@
 dmm_array <-
-function(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
+function(mdf,fixform,components,specific.components,cohortform,posdef,fixedgls,fixedglsopt,dmefglsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
 # dmm_array()   -   do the traits pairwise and return a dmmarray object
 {
   if(is.null(mdf$rel)) {
@@ -28,7 +28,7 @@ function(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt
        else {
          mdf$df$Ymat <- ymat # put local ymat into mdf$df so passed to dmm()
        }
-      fit[[i,j]] <- dmesolve(mdf,fixform,components,specific.components,cohortform,posdef,gls,glsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
+      fit[[i,j]] <- dmesolve(mdf,fixform,components,specific.components,cohortform,posdef,fixedgls,fixedglsopt,dmefglsopt,dmeopt,ncomp.pcr,relmat,dmekeep,dmekeepfit)
       class(fit[[i,j]]) <- "dmm"
     }
   }

@@ -1,5 +1,5 @@
 plot.dmm <-
-function(x, traitset="all",gls=F, ...)
+function(x, traitset="all",fixedgls=F, ...)
 #  plot.dmm() - plot residuals of a dmm fitted model object
 {
   if(traitset[1] == "all"){
@@ -14,7 +14,7 @@ function(x, traitset="all",gls=F, ...)
   l <- length(traits)
 
   if(x$dmeopt == "qr"){   # "qr" case is different
-    if(!gls) {
+    if(!fixedgls) {
       if(is.null(x$dme.fit)){
         stop("Object ",substitute(x)," must contain attribute dme.fit:\n")
       }
@@ -59,7 +59,7 @@ function(x, traitset="all",gls=F, ...)
     }
 
 
-    if(gls) {
+    if(fixedgls) {
       if(is.null(x$gls)) {
         stop("Object ",substitute(x)," must contain attribute gls:\n")
       }
@@ -111,7 +111,7 @@ function(x, traitset="all",gls=F, ...)
 
   else if(x$dmeopt == "pcr") {   # "pcr" case
     nc <- x$dme.fit$ncomp
-    if(!gls) {
+    if(!fixedgls) {
       if(is.null(x$dme.fit)){
         stop("Object ",substitute(x)," must contain attribute dme.fit:\n")
       }
@@ -155,7 +155,7 @@ function(x, traitset="all",gls=F, ...)
     }
 
 
-    if(gls) {
+    if(fixedgls) {
       if(is.null(x$gls)) {
         stop("Object ",substitute(x)," must contain attribute gls:\n")
       }
@@ -204,7 +204,7 @@ function(x, traitset="all",gls=F, ...)
   }
   
   else {   # other than "qr" or "pcr" cases
-    if(!gls) {
+    if(!fixedgls) {
       if(is.null(x$dme.fit)){
         stop("Object ",substitute(x)," must contain attribute dme.fit:\n")
       }
@@ -248,7 +248,7 @@ function(x, traitset="all",gls=F, ...)
     }
 
 
-    if(gls) {
+    if(fixedgls) {
       if(is.null(x$gls)) {
         stop("Object ",substitute(x)," must contain attribute gls:\n")
       }

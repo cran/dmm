@@ -22,7 +22,7 @@ function(siga, am, ctable,varopt="both",covopt="bound"){
           }
          }
          if(varopt == "nearPD" || varopt == "both"){
-           pdmat <- nearPD(matrix(siga[i, ], am$l, am$l),ensureSymmetry=T)
+           pdmat <- nearPD(matrix(siga[i, ], am$l, am$l),ensureSymmetry=T,keepDiag=T)
           #overwrite siga
            siga[i, ] <- matrix(pdmat$mat, 1, am$l * am$l)
          }

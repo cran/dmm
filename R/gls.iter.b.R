@@ -1,9 +1,9 @@
 gls.iter.b <-
-function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dmekeepfit){
+function(am, start.b, start.siga,dyad.explist,fixedglsopt,dmefglsopt,dmeopt,ctable,ncomp.pcr,dmekeepfit,mmat){
 # gls.iter.b() - iterate b -> GLSb and compute new siga from DME by dmeopt,
 #                multiv2 version
 #                 ssr at finish, uses gls.b.gmat() 
-    stopcrit <- glsopt$stoptol + 10
+    stopcrit <- fixedglsopt$stoptol + 10
     b <- start.b
     siga <- start.siga
     count <- 0
@@ -21,8 +21,8 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
     evecblock <- matrix(0,am$n * am$n * am$l * am$l, am$l*am$l)
     dimnames(evecblock) <- list(NULL,dimnames(siga)[[2]])
 
-    while (stopcrit > glsopt$stoptol && count < glsopt$maxiter) {
-#       cat("Iteration round: ", count, "\n")
+    while (stopcrit > fixedglsopt$stoptol && count < fixedglsopt$maxiter) {
+#       cat("Iteration(gls-fixed-effects) round: ", count, "\n")
         oldb <- b
         oldsiga <- siga
 #    compute V matrix
@@ -37,7 +37,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
 #       print(newb)
         newgmat.qr <- qr(newb.list$gmat)
 #    damp the b update
-        b <- oldb + (newb - oldb) * glsopt$bdamp
+        b <- oldb + (newb - oldb) * fixedglsopt$bdamp
 #       cat("GLS b damped:\n")
 #       print(b)
 #  update siga
@@ -105,7 +105,32 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
           ncomp <- dme.pcr$ncomp
 # extract siga and sesiga
           siga <- matrix(coef(dme.pcr)[,,1], am$v, am$l * am$l,dimnames=list(colnames(dyad.explist$emat), colnames(evec)))
-  }
+  }  # end "pls" option
+
+  else if (dmeopt == "fgls") {
+    # use existing gls estimate as oldsiga
+    oldsiga <- siga
+
+    dme.fgls <- fgls.iter.siga(am, oldsiga, mmat, dyad.explist, evec, dmefglsopt, dmeopt, ctable)
+    siga <- dme.fgls$siga
+#   cat("Siga fgls:\n")
+#   print(siga)
+#   dimnames(siga) <- list(dimnames(dyad.explist$emat)[[2]], dimnames(evec)[[2]])
+#   vsigabase <- dme.fgls$vsiga
+#   vsiga <- kronecker(vard,vsigabase,make.dimnames=T) # multiv but wrong for >1 trait
+#   sesiga <- dme.fgls$sesiga
+#   sesiga <- matrix(sqrt(diag(vsiga)), am$v, am$l * am$l, dimnames=dimnames(siga)) #multiv but wrong for >1 trait
+#   cat("Sesiga:\n")
+#   print(sesiga)
+
+    if(dmekeepfit) {
+      dme.fit.list <- list(dme.fit=dme.fgls,dmeopt=dmeopt)
+    }
+    else {
+      dme.fit.list <- list(dmeopt=dmeopt)
+    }
+
+  } # end of "fgls option
 
 #       cat("Updated siga:\n")
 #       print(siga)
@@ -123,7 +148,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
         for (ll in 1:am$l) {
             for (i in 1:am$k) {
                 sumdev <- sumdev + abs(b[i, ll] - oldb[i, ll])
-                # (b - oldb) is always (newb-oldb)*glsopt$bdamp - ie part of the difference
+                # (b - oldb) is always (newb-oldb)*fixedglsopt$bdamp - ie part of the difference
             }
         }
         stopcrit <- sumdev/(am$l * am$k)
@@ -132,9 +157,9 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
         cat("Round = ",count," Stopcrit = ",stopcrit,"\n")
     }
 #     end of iteration
-      cat("Iteration completed - count = ",count,"\n")
+      cat("Iteration(gls-fixed-effects) completed - count = ",count,"\n")
 #   convergence check
-      if(count == glsopt$maxiter){
+      if(count == fixedglsopt$maxiter){
         cat("Failed to converge\n")
         parlist <- list(ok=F,b=NULL,seb=NULL,siga=NULL,sesiga=NULL,vard=NULL,vsiga=NULL,msr=NULL,msrdf=NULL,msa=NULL)
         return(parlist)
@@ -165,7 +190,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
       else {
         dme.fit.list <- list(dmeopt=dmeopt)
       }
-    }
+    } # end "qr" option
     else if (dmeopt == "lm"){
      sesiga <- matrix(0, am$v, am$l * am$l, dimnames=dimnames(siga))
      if(am$l == 1) {
@@ -193,7 +218,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
      else {
        dme.fit.list <- list(dmeopt=dmeopt)
      }
-    }
+    } # end "lm" option
 
     else if (dmeopt == "lmrob"){
      sesiga <- matrix(0, am$v, am$l * am$l, dimnames=dimnames(siga))
@@ -222,7 +247,7 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
      else {
        dme.fit.list <- list(dmeopt=dmeopt)
      }
-    }
+    } # end "lmrob" option
 
     else if(dmeopt == "pcr"){
       if(ncomp.pcr == "all") {
@@ -255,7 +280,40 @@ function(am, start.b, start.siga,dyad.explist,glsopt,dmeopt,ctable,ncomp.pcr,dme
        else {
          dme.fit.list <- list(dmeopt=dmeopt)
        }
-      }
+      } # end "pls" option
+
+  else if (dmeopt == "fgls") {
+    # use existing gls estimate as oldsiga
+    oldsiga <- siga
+    vard <- crossprod(qr.resid(dyad.explist$emat.qr,evec))
+    vard <- vard/(degfd)
+    cat("Residual var for DME (vard):\n")
+    print(vard)
+    vart <- crossprod(evec,evec)/degfd
+    cat("Total var for DME (vart):\n")
+    print(vart)
+    # end of ols
+
+    dme.fgls <- fgls.iter.siga(am, oldsiga, mmat, dyad.explist, evec, dmefglsopt, dmeopt, ctable)
+    siga <- dme.fgls$siga
+#   cat("Siga fgls:\n")
+#   print(siga)
+#   dimnames(siga) <- list(dimnames(dyad.explist$emat)[[2]], dimnames(evec)[[2]])
+    vsigabase <- dme.fgls$vsiga
+    vsiga <- kronecker(vard,vsigabase,make.dimnames=T) # multiv but wrong for >1 trait
+    sesiga <- dme.fgls$sesiga
+#   sesiga <- matrix(sqrt(diag(vsiga)), am$v, am$l * am$l, dimnames=dimnames(siga)) #multiv but wrong for >1 trait
+#   cat("Sesiga:\n")
+#   print(sesiga)
+
+    if(dmekeepfit) {
+      dme.fit.list <- list(dme.fit=dme.fgls,dmeopt=dmeopt)
+    }
+    else {
+      dme.fit.list <- list(dmeopt=dmeopt)
+    }
+
+  } # end of "fgls option
 
 #  check final siga posdef
       if(nsf == 0) {  # no specific factors

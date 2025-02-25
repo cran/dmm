@@ -1,5 +1,5 @@
 dyad.am.expect <-
-function(am, gls,dmeopt){
+function(am, fixedgls,dmeopt,mmat){
 # dyad.am.expect()
 # evaluate parts of dyadic model equation  including emat and emat.qr
 # am is an ante-model object
@@ -10,7 +10,7 @@ function(am, gls,dmeopt){
 # Note: This code sets the order of components in siga[,]
 #
 # setup m matrix
-  mmat <- diag(am$n) - am$x %*% ginv(am$x)
+# mmat <- diag(am$n) - am$x %*% ginv(am$x)
 # cat("mmat:\n")
 # print(mmat)
 #
@@ -35,12 +35,12 @@ function(am, gls,dmeopt){
         zpre <- eval(parse(text=paste("am$",pre,sep="")))
         zpost <- eval(parse(text=paste("am$",post,sep="")))
         rel <- eval(parse(text=paste("am$rel$",prel,sep="")))
-        dae <- dae.nonspecific(zpre,rel,zpost,mmat,am$components[kc],dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,gls)
+        dae <- dae.nonspecific(zpre,rel,zpost,mmat,am$components[kc],dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,fixedgls,dmeopt)
       }
       else if((pre != "S") & (post != "S") & (prel == "I") ){ # cases with no rel matrix
         zpre <- eval(parse(text=paste("am$",pre,sep="")))
         zpost <- eval(parse(text=paste("am$",post,sep="")))
-        dae <- dae.nonspecific.I(zpre,zpost,mmat,am$components[kc],dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,gls)
+        dae <- dae.nonspecific.I(zpre,zpost,mmat,am$components[kc],dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,fixedgls,dmeopt)
       }
       else if((pre == "S") & (post == "S") & (prel == "S") ) { # cases with 2 parts AND'ed
         indexs <- match(am$components[kc],ctable$cohort)
@@ -54,7 +54,7 @@ function(am, gls,dmeopt){
         zpre2 <- eval(parse(text=paste("am$",pre2,sep="")))
         zpost2 <- eval(parse(text=paste("am$",post2,sep="")))
         zop <- paste(" ",op," ",sep="")
-        dae <- dae.nonspecific.S(zpre1,zpost1,zpre2,zpost2,zop,mmat,am$components[kc],dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,gls)
+        dae <- dae.nonspecific.S(zpre1,zpost1,zpre2,zpost2,zop,mmat,am$components[kc],dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,fixedgls,dmeopt)
       }
       else {   
         stop("Expectation for component not recognised:\n")
@@ -79,12 +79,12 @@ function(am, gls,dmeopt){
           zpre <- eval(parse(text=paste("am$",pre,sep="")))
           zpost <- eval(parse(text=paste("am$",post,sep="")))
           rel <- eval(parse(text=paste("am$rel$",prel,sep="")))
-          dae <- dae.specific(zpre, rel, zpost, mmat, kf ,am$specific.components[[kf]][lc], am$effnames,am$effcodes,am$effnandc,am$comcodes,am$varcodes,dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,gls,ctable)
+          dae <- dae.specific(zpre, rel, zpost, mmat, kf ,am$specific.components[[kf]][lc], am$effnames,am$effcodes,am$effnandc,am$comcodes,am$varcodes,dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,fixedgls,dmeopt,ctable)
         }
         else if((pre != "S") & (post != "S") & (prel == "I") ) {  # cases with no rel matrix
           zpre <- eval(parse(text=paste("am$",pre,sep="")))
           zpost <- eval(parse(text=paste("am$",post,sep="")))
-          dae <- dae.specific.I(zpre, zpost, mmat, kf ,am$specific.components[[kf]][lc], am$effnames,am$effcodes,am$effnandc,am$comcodes,am$varcodes,dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,gls,ctable)
+          dae <- dae.specific.I(zpre, zpost, mmat, kf ,am$specific.components[[kf]][lc], am$effnames,am$effcodes,am$effnandc,am$comcodes,am$varcodes,dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,fixedgls,dmeopt,ctable)
         }
         else if((pre == "S") & (post == "S") & (prel == "S") ) {  # cases with 2 parts ANDed
       indexs <- match(am$specific.components[[kf]][lc],ctable$cohort)
@@ -98,7 +98,7 @@ function(am, gls,dmeopt){
       zpre2 <- eval(parse(text=paste("am$",pre2,sep="")))
       zpost2 <- eval(parse(text=paste("am$",post2,sep="")))
       zop <- paste(" ",op," ",sep="")
-      dae <- dae.specific.S(zpre1,zpost1,zpre2,zpost2,zop,mmat,kf,am$specific.components[[kf]][lc],am$effnames,am$effcodes,am$effnandc,am$comcodes,am$varcodes,dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,gls,ctable)
+      dae <- dae.specific.S(zpre1,zpost1,zpre2,zpost2,zop,mmat,kf,am$specific.components[[kf]][lc],am$effnames,am$effcodes,am$effnandc,am$comcodes,am$varcodes,dae$cnames,dae$cnamesie,dae$emat,dae$vmat,dae$icol,dae$iecol,fixedgls,dmeopt,ctable)
         }
         else {
           stop("Expectation for component not recognised:\n")
@@ -116,7 +116,7 @@ function(am, gls,dmeopt){
   dimnames(emat) <- list(NULL,dae$cnames)
 
   vmat <- NULL
-  if(gls) {
+  if(fixedgls | dmeopt == "fgls") {
     vmat <- matrix(dae$vmat[,1:am$v],am$n * am$n, am$v)
     dimnames(vmat) <- list(NULL,dae$cnames)
   }
@@ -153,8 +153,8 @@ function(am, gls,dmeopt){
     }
   }
 
-# do qr on vmat  - only need if gls=T
-  if(gls) {
+# do qr on vmat  - only need if fixedgls=T
+  if(fixedgls | dmeopt == "fgls") {
     vmat.qr <- qr(dae$vmat)
   }
   else {

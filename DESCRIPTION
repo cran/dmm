@@ -1,20 +1,25 @@
 Package: dmm
 Type: Package
 Title: Dyadic Mixed Model for Pedigree Data
-Version: 2.1-10
-Date: 2024-05-31
-Author: Neville Jackson
+Version: 3.1-1
+Date: 2025-02-24
+Authors@R: c(person("Neville", "Jackson", role = c("aut", "cre"),
+                     email = "nanddjackson@bigpond.com",
+                     comment = c(ORCID = "0000-0002-1820-9609")))
+Author: Neville Jackson [aut, cre] (<https://orcid.org/0000-0002-1820-9609>)
 Maintainer: Neville Jackson <nanddjackson@bigpond.com>
-Description: Dyadic mixed model analysis with multi-trait responses and
-  pedigree-based partitioning of individual variation into a range of
-  environmental and genetic variance components for individual and 
+Description: Mixed model analysis for quantitative genetics
+  with multi-trait responses and pedigree-based partitioning 
+  of individual variation into a range of environmental and 
+  genetic variance components for individual and 
   maternal effects. Method documented in dmmOverview.pdf; dmm is an 
   implementation of dispersion mean model described by
   Searle et al. (1992) "Variance Components", Wiley, NY.
+  'DMM' can do 'MINQUE', 'bias-corrected-ML', and 'REML'  variance component estimates.
 Depends: MASS, Matrix, robustbase, pls, nadiv
 Imports: stats, graphics, grDevices
 License: GPL-2 | GPL (>= 2) | GPL-3
 NeedsCompilation: no
-Packaged: 2024-06-02 11:10:20 UTC; nevj
+Packaged: 2025-02-25 10:32:56 UTC; nevj
 Repository: CRAN
-Date/Publication: 2024-06-03 06:30:03 UTC
+Date/Publication: 2025-02-25 10:50:02 UTC

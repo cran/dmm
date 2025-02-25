@@ -7,7 +7,7 @@ Print method for a \code{dmm()} fitted model object.
 Provide a short description of the model fitted and the fixed effects and (co)variance component estimates obtained for an object of class \code{dmm}. 
 }
 \usage{
-\S3method{print}{dmm}(x, traitset = "all", gls = F, ...)
+\S3method{print}{dmm}(x, traitset = "all", fixedgls = F, ...)
 }
 \arguments{
   \item{x}{
@@ -16,8 +16,8 @@ An object of class \code{dmm}.
   \item{traitset}{
 A vector containing the names of the subset of traits for which fixed effects and (co)variance components are to be printed. Default is "all" which means to print estimates for all traits present in object \code{x}.
 }
-  \item{gls}{
-Logical flag: should the fixed effects and (co)variance component estimates by GLS-b method be printed in addition to the fixed effects and (co)variance component estimates by OLS-b method? Default is \code{gls=FALSE}. The GLS-b fixed effects and (co)variance component estimates can only be printed if object \code{x} contains the attribute \code{gls}, that is if \code{x} was constructed by a \code{dmm()} call with argument \code{gls=TRUE}.
+  \item{fixedgls}{
+Logical flag: should the fixed effects and (co)variance component estimates by GLS-b method be printed in addition to the fixed effects and (co)variance component estimates by OLS-b method? Default is \code{fixedgls=FALSE}. The GLS-b fixed effects and (co)variance component estimates can only be printed if object \code{x} contains the attribute \code{fixedgls}, that is if \code{x} was constructed by a \code{dmm()} call with argument \code{fixedgls=TRUE}.
 
 }
   \item{...}{

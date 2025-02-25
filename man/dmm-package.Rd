@@ -5,14 +5,14 @@
 Dyadic mixed model analysis for pedigree data
 }
 \description{
-Dyadic mixed model analysis with multi-trait responses and pedigree-based partitioning of an individual random effect into a range of genetic and environmental (co)variance components for individual (ie direct) and maternal contributions to phenotype.
+ Mixed model analysis with multi-trait responses and pedigree-based partitioning of an individual random effect into a range of genetic and environmental (co)variance components for individual (ie direct) and maternal contributions to phenotype. Method is documented in dmmOverview.pdf; dmm is an implementation of dispersion mean model described by Searle et al (1992) "Variance Components" Wiley, NY. DMM can do MONGUE, bias-corrected-ML, and REML (co)variance component estimates.
 }
 \details{
 \tabular{ll}{
 Package: \tab dmm\cr
 Type: \tab Package\cr
-Version: \tab 2.1-8\cr
-Date: \tab 2023-07-13\cr
+Version: \tab 3.1-1\cr
+Date: \tab 2021-01-19\cr
 License: \tab GPL-2 \cr
 }
 This package provides tools for setting up and solving dyadic model equations 
@@ -35,6 +35,7 @@ in a quantitative genetic analysis:
 \item test example datasets
 \item alternative approach to iterative ML and REML estimation procedures
 \item component estimates equivalent to MINQUE (after fixed effects by OLS) and bias-corrected-ML (after fixed effects by GLS)
+\item component estimates equivalent to REML are available but the size of data set is severely limited.
 \item multi-trait or traitspairwise or traitsblockwise analyses
 \item class-specific genetic parameters
 \item maternal or paternal founderline components
@@ -42,7 +43,7 @@ in a quantitative genetic analysis:
 
 The main functions in dmm are:
 \describe{
-\item{dmm()}{ Sets up and solves dyadic model equations for a dataset which is supplied as a dataframe containing both the pedigree information and the observations}
+\item{dmm()}{ Sets up and solves dyadic mixed model equations for a dataset which is supplied as a dataframe containing both the pedigree information and the observations}
 \item{mdf()}{Checks the dataframe for compliance with dmm requirements, converts multi-trait data to a matrix within the dataframe, and optionally appends relationship matrices to the dataframe.}
 \item{summary()}{S3 method, reports estimated (co)variance components and standard errors}
 \item{csummary()}{S3 method, reports reports (co)varianve components with standard erors, sorted into class-specific groups, so that thaey sum to phenotypic (co)variance within each group}
@@ -74,13 +75,14 @@ There are also some example datasets, some with  'known' answers:
 }
  There are other requirements, and these are documented under the \code{mdf()} help page, which also documents how to use \code{mdf()} to convert the user's dataframe to an acceptable form, which can be either another dataframe or an object of class \code{mdf}.
 
- Given an acceptable data object, one simply calls function \code{dmm()} with appropriate arguments, the first of which is the data object's name. There are \code{formula} arguments to specify fixed effects and cohorts, and the components to be partitioned are specified in a simple vector of names. Arguments are documented under the \code{dmm()} help page. An object of class \code{dmm} is returned and should be saved in the R workspace.
+ Given an acceptable data object, one simply calls function \code{dmm()} with appropriate arguments, the first of which is the data object's name. There are \code{formula} arguments to specify fixed effects and cohorts, and the random variance components to be partitioned are specified in a simple vector of names. Arguments are documented under the \code{dmm()} help page. An object of class \code{dmm} is returned and should be saved in the R workspace.
 
  Given a \code{dmm} object, there are S3 methods to display the results as follows:
 \describe{
 \item{print()}{ Reports fixed effect coefficient and (co)variance component estimates}
 \item{summary()}{ Reports fixed effect coefficient and (co)variance component estimates with standard errors and confidence limits}
 \item{gprint()}{ Reports genetic parameters (proportion of variance and correlation) for each component partitioned}
+\item{csummary()}{ Reports (co)variance component estimates with standard errors and confidence limits}
 \item{gsummary()}{ Reports genetic parameters with standard errors and confidence limits}
 \item{gresponse()}{ reports genetic response to selection, for estimated parameters}
 }
@@ -102,6 +104,7 @@ In the \code{dmm} package
 \describe{
 \item{dmm()}{ for dmm function arguments and return value}
 \item{summary()}{ for fixed coefficients and (co)variance components}
+\item{csummary()}{ for component estimates}
 \item{gsummary()}{ for genetic parameters}
 \item{gresponse()}{ for predicted selection response}
 \item{make.ctable()}{ for comprehensive list of variance components}

@@ -1,5 +1,5 @@
 dae.specific.I <-
-function(zpre,zpost,mmat,factorno,componentname,effnames,effcodes,effnandc,comcodes,varcodes,cnames,cnamesie,emat,vmat,icol,iecol,gls,ctable)
+function(zpre,zpost,mmat,factorno,componentname,effnames,effcodes,effnandc,comcodes,varcodes,cnames,cnamesie,emat,vmat,icol,iecol,fixedgls,dmeopt,ctable)
 # dae.specific.I() - expectations for a specific component
 #               zpre, zpost are zi or zm or zc
 #               returns incremented icol which is next vacant col of W
@@ -22,7 +22,7 @@ function(zpre,zpost,mmat,factorno,componentname,effnames,effcodes,effnandc,comco
           szpost <- zpost[[effnandc[[factorno]][j]]]
           zaz <- szpre %*% t(szpost)
           emat[,icol] <- as.vector(mmat %*% zaz %*% mmat) # one col of W matrix
-          if(gls) {
+          if(fixedgls | dmeopt == "fgls") {
             vmat[,icol] <- as.vector(zaz) # one col of V matrix
           }
           cnames[icol] <- specificcomponentname # name for this col
@@ -47,7 +47,7 @@ function(zpre,zpost,mmat,factorno,componentname,effnames,effcodes,effnandc,comco
         szpost <- zpost[[effnandc[[factorno]][j]]]
         zaz <- szpre %*% t(szpost)
         emat[,icol] <- as.vector(mmat %*% zaz %*% mmat) # one col of W matrix
-        if(gls) {
+        if(fixedgls | dmeopt == "fgls") {
           vmat[,icol] <- as.vector(zaz) # one col of V matrix
         }
         cnames[icol] <- specificcomponentname # name for this col

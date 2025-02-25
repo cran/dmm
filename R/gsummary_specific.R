@@ -1,5 +1,5 @@
 gsummary_specific <-
-function(dmmobj,traitset,componentset,bytrait,gls,digits,...)
+function(dmmobj,traitset,componentset,bytrait,fixedgls,digits,...)
 # gsummary_specific() - summarize component estimates for specific case
 {
     if(traitset[1] == "all"){
@@ -24,22 +24,22 @@ function(dmmobj,traitset,componentset,bytrait,gls,digits,...)
   csumlist <- vector("list",nc)
   ic <- 1
   for(kc in names(dmmobj$specific)) {
-    csumlist[[ic]] <- make.gsummarytables(dmmobj$specific[[kc]],traitset,componentset,bytrait,gls,digits, ...)
+    csumlist[[ic]] <- make.gsummarytables(dmmobj$specific[[kc]],traitset,componentset,bytrait,fixedgls,digits, ...)
     ic <- ic + 1
   }
   names(csumlist) <- names(dmmobj$specific)
-  retobj <- list(csumlist=csumlist,traits=traits,components=components,bytrait=bytrait,gls=gls,digits=digits)
+  retobj <- list(csumlist=csumlist,traits=traits,components=components,bytrait=bytrait,fixedgls=fixedgls,digits=digits)
 
-  if(gls) {
+  if(fixedgls) {
     nc <- length(names(dmmobj$gls$specific))
     gcsumlist <- vector("list",nc)
     ic <- 1
     for(kc in names(dmmobj$gls$specific)) {
-      gcsumlist[[ic]] <- make.gsummarytables(dmmobj$gls$specific[[kc]],traitset,componentset,bytrait,gls,digits, ...)
+      gcsumlist[[ic]] <- make.gsummarytables(dmmobj$gls$specific[[kc]],traitset,componentset,bytrait,fixedgls,digits, ...)
       ic <- ic + 1
     }
     names(gcsumlist) <- names(dmmobj$gls$specific)
-    retobj <- list(csumlist=csumlist,gcsumlist=gcsumlist,traits=traits,components=components,bytrait=bytrait,gls=gls,digits=digits)
+    retobj <- list(csumlist=csumlist,gcsumlist=gcsumlist,traits=traits,components=components,bytrait=bytrait,fixedgls=fixedgls,digits=digits)
   }
 
   retobj$call <- match.call()

@@ -1,9 +1,9 @@
 print.dmm <-
-function(x, traitset="all",gls=F, ...)
+function(x, traitset="all",fixedgls=F, ...)
 #  print.dmm() - short description of a dmm fitted model object
 {
   cat("Call:\n")
-  print(x$call)
+  print(attr(x,"call"))
   cat("Fixed formula:\n")
   print(x$fixform)
   cat("Cohort formula:\n")
@@ -18,20 +18,20 @@ function(x, traitset="all",gls=F, ...)
     traits <- traitset
   }
   print(traits)
-  cat("Fitted OLS fixed effects:\n")
+  cat("Fitted OLS-fixed-effects:\n")
   print(x$b[ ,traits])
-  cat("Var/covariance components partitioned by DME after OLS fit:\n")
+  cat("Var/covariance components partitioned by DME after OLS-fixed-effects fit:\n")
   traitpairs <- permpaste(traits)
   print(x$siga[ ,traitpairs])
-  cat("Observed (residual) var/covariance after OLS fit:\n")
+  cat("Observed (residual) var/covariance after OLS-fixed-effects fit:\n")
   print(x$vara[traits,traits])
 
-  if(gls) {
-    cat("Fitted GLS fixed effects:\n")
+  if(fixedgls) {
+    cat("Fitted GLS-fixed-effects:\n")
     print(x$gls$b[ ,traits])
-    cat("Var/covariance components partitioned by DME after GLS fit:\n")
+    cat("Var/covariance components partitioned by DME after GLS-fixed-effects fit:\n")
     print(x$gls$siga[ ,traitpairs])
-    cat("Observed (residual) var/covariance after GLS fit:\n")
+    cat("Observed (residual) var/covariance after GLS-fixed-effects fit:\n")
     print(x$gls$observed.variance[traits,traits])
   }
 

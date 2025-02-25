@@ -1,5 +1,5 @@
 make.gsummarytables <-
-function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3)
+function(dmmobj,traitset="all",componentset="all",bytrait=T,fixedgls=F,digits=3)
 # make.gsummarytables()  -  make one set on genetic summary tables
 #                        - ftables, rtables, ptables
 {
@@ -91,7 +91,7 @@ function(dmmobj,traitset="all",componentset="all",bytrait=T,gls=F,digits=3)
                          CI95lo=ci95lo,CI95hi=ci95hi)
     ptables[[1]] <- ptable
 
-    retobj <- list(ftables=ftables, rtables=rtables, ptables=ptables, traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+    retobj <- list(ftables=ftables, rtables=rtables, ptables=ptables, traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
     class(retobj) <- "gsummarytables.dmm"
     return(retobj)
 

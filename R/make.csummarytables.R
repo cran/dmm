@@ -1,5 +1,5 @@
 make.csummarytables <-
-function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3)
+function(object,traitset="all",componentset="all",bytrait=T,fixedgls=F,digits=3)
 # make.csummarytables()  -  make one set of component summary tables
 {
     if(traitset[1] == "all"){
@@ -54,7 +54,7 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3)
        ctables[[count]] <- ctable
     }
   }
-  retobj <- list(ctables=ctables,traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+  retobj <- list(ctables=ctables,traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
   class(retobj) <- "csummarytables.dmm"
   return(retobj)
 

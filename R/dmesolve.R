@@ -1,6 +1,7 @@
 dmesolve <-
-function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.components=NULL,cohortform=NULL,posdef=T,gls=F,glsopt=list(maxiter=200,bdamp=0.8,stoptol=0.01), dmeopt="qr",ncomp.pcr="rank",relmat="inline",dmekeep=F,dmekeepfit=F) {
-# dmesolve() - dyadic model equations solved by ols and (optionally) gls
+function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.components=NULL,cohortform=NULL,posdef=T,fixedgls=F,fixedglsopt=list(maxiter=200,bdamp=0.8,stoptol=0.01),dmefglsopt=list(maxiter=100,bdamp=0.8,stoptol=0.001), dmeopt="qr",ncomp.pcr="rank",relmat="inline",dmekeep=F,dmekeepfit=F) {
+# dmesolve() - fixed model equations solved by ols and (optionally) gls
+#            - dyadic model equations solved by ols and (optionally) pcr, lmrob, fgls
   #
   # fixform is the model formula for fixed effects
   # df is dataframe, k is fixed effects, l is traits
@@ -79,7 +80,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 # initial aov() of fixed effects only
 #
   fixed.aov <- aov(fixform,df,x=T,y=T,qr=T)
-  cat("OLS-b step:\n")
+  cat("OLS-fixed-effects step:\n")
 # cat("AOV step:\n")
 # cat("Initial aov of fixed effects only\n")
 # print(fixed.aov)
@@ -203,6 +204,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 # cat("AOV followup completed:\n")
 
   ols.fixed.list <- list(b=b,seb=seb,vara=vara,totn=am$n,degf=degf)
+  cat("OLS-fixed-effects step completed:\n")
 
   if (am$v == 0) {
     stop("No components defined:\n")
@@ -216,13 +218,12 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 # setup evec - data vector matching emat
    evec <- kronecker(ymxb,ymxb,make.dimnames=T)
 #
-# cat("(ymxb)(ymxb)'\n")
-# print(evec)
-#
 
+# setup mmat
+    mmat <- diag(am$n) - am$x %*% ginv(am$x)
 
 # setup emat ( W matrix)- expectation matrix (also emat.qr and zaz = vmat)
-    dyad.explist <- dyad.am.expect(am,gls,dmeopt) 
+    dyad.explist <- dyad.am.expect(am,fixedgls,dmeopt,mmat) 
     am$v <- dyad.explist$newv  # reduce v to no of estimable components
 
 #
@@ -244,6 +245,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 # fit options for DME's
   if(dmeopt == "qr") {
     cat("QR option on dyadic model equations:\n")
+    siga <- matrix(0, am$v, am$l * am$l,dimnames=list(colnames(dyad.explist$emat), colnames(evec)))
     siga <- qr.coef(dyad.explist$emat.qr,evec)  # siga is r x l^2
     vard <- crossprod(qr.resid(dyad.explist$emat.qr,evec))
     vard <- vard/degfd
@@ -384,6 +386,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 #   vsiga <- nearPD(vsiga,ensureSymmetry=T)$mat
 
 # extract siga and sesiga
+     siga <- matrix(0, am$v, am$l * am$l,dimnames=list(colnames(dyad.explist$emat), colnames(evec)))
      siga <- matrix(coef(dme.pcr)[,,1], am$v, am$l * am$l,dimnames=list(colnames(dyad.explist$emat), colnames(evec)))
      sesiga <- matrix(sqrt(diag(vsiga)), am$v, am$l * am$l, dimnames=dimnames(siga))
 #     cat("Sesiga:\n")
@@ -400,11 +403,54 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
     else {
       dme.fit.list <- list(pcr.loadings=loadings(dme.pcr),dmeopt=dmeopt)
     }
+  }  # end of "pcr" option
+  
+  else if (dmeopt == "fgls") {
+    if( am$l > 1) {
+      cat("Note: Feasable GLS with multivariate data is experimental and untested \n")
+    }
+    # do ols first to get vard ( var of dyadic residuals) and starting siga
+    siga <- qr.coef(dyad.explist$emat.qr,evec)  # siga is r x l^2
+  cat("fgls iteration starting siga from ols:\n")
+  print(siga)
+    vard <- crossprod(qr.resid(dyad.explist$emat.qr,evec))
+    vard <- vard/(degfd)
+    cat("Residual var for DME (vard):\n")
+    print(vard)
+    vart <- crossprod(evec,evec)/degfd
+    cat("Total var for DME (vart):\n")
+    print(vart)
+    # end of initial ols before fgls
+
+    dme.fgls <- fgls.iter.siga(am, siga, mmat, dyad.explist, evec, dmefglsopt, dmeopt, ctable)
+    siga <- dme.fgls$siga
+#   cat("Siga fgls:\n")
+#   print(siga)
+#   cat("dme.fgls:\n")
+#   print(str(dme.fgls))
+    vsigabase <- dme.fgls$vsiga
+    vsiga <- kronecker(vard,vsigabase,make.dimnames=T) # multiv but wrong for >1 trait
+    sesiga <- dme.fgls$sesiga  # univariate
+#   sesiga <- matrix(sqrt(diag(vsiga)), am$v, am$l * am$l, dimnames=dimnames(siga)) # multiv but wrong for >1 trait
+#   cat("Sesiga:\n")
+#   print(sesiga)
+
+    if(dmekeepfit) {
+      dme.fit.list <- list(dme.fit=dme.fgls,dmeopt=dmeopt)
+    }
+    else {
+      dme.fit.list <- list(dmeopt=dmeopt)
+    }
+
+  } # end of "fgls option
+
+  else {
+    stop("Invalid dmeopt option:", dmeopt,"\n")
   }
 
 # cat("Partitioned variance  components from DME equations:\n")
 # print(siga)
-  cat("DME substep completed:\n")
+# cat("DME substep completed:\n")
 
 # Subdivide siga if are specific components, otherwise do usual parameters
  
@@ -479,26 +525,27 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 
   }   #  end of some specific factors case
 
-   cat("OLS-b step completed:\n")
+   cat("DME substep with OLS-fixed-effects completed:\n")
 
 #
-# GLS analysis
-# GLS on b step
-  if(gls && posdef) {
-   cat("\nGLS-b step:\n")
-#  cat("Fixed effects iterated -> GLS b\n")
-#  cat("Partitioned variance components from DME after GLS b \n")
+# GLS fixed model analysis
+# GLS-fixed-effects step
+  if(fixedgls && posdef) {
+   cat("\nGLS-fixed-effects step:\n")
+#  cat("Fixed effects iterated -> GLS-fixed-effects\n")
+#  cat("Partitioned variance components from DME after GLS-fixed-effects \n")
    if(am$l > 1) {
      cat("Warning: Multivariate GLS is not same as multiple univariate GLS's\n")
    }
 
-#  GLS iteration of b's
+#  GLS iteration of fixed-efects's
 # cat("v = ",am$v,"\n")
 # cat("l = ",am$l,"\n")
-   gls.list <- gls.iter.b(am, b, siga, dyad.explist, glsopt, dmeopt, ctable, ncomp.pcr, dmekeepfit)
+   gls.list <- gls.iter.b(am, b, siga, dyad.explist, fixedglsopt, dmefglsopt, dmeopt, ctable, ncomp.pcr, dmekeepfit,mmat)
 
      if(gls.list$ok) {
-       cat("GLS-b step completed successfully:\n")
+       cat("GLS-fixed-effects step completed successfully:\n")
+       cat("DME substep:\n")
        cat("Components to genetic parameters and SE's:\n")
 
 # Subdivide siga if are specific components, otherwise do usual parameters
@@ -506,7 +553,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
        nsf <- length(specific.components)
        if (nsf == 0) {  # no specific factors
 
-         cat("GLS genetic parameters with nonspecific components:\n")
+         cat("GLS-fixed-effects - genetic parameters with nonspecific components:\n")
          gls.genpar.list <- comtopar(am$v,am$l,gls.list$siga, gls.list$msa, gls.list$vsiga,gls.list$sesiga,ctable)
          gls.list.out <- list(b=gls.list$b, seb=gls.list$seb, siga=gls.list$siga, sesiga=gls.list$sesiga, vard=gls.list$vard, msr=gls.list$msr, msrdf=gls.list$msrdf, msa=gls.list$msa)
          gls.list.out <- c(gls.list.out,gls.genpar.list,gls.list$dme.fit.list)
@@ -517,7 +564,7 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
       }  # end no specific factor case
       else {  # some specific factors
 
-        cat("GLS genetic parameters with specific components:\n")
+        cat("GLS-fixed-effects - genetic parameters with specific components:\n")
 
 #  augment siga with inestimable components
         ielist <- sigatoie(dyad.explist$cnames,dyad.explist$cnamesie,gls.list$siga,gls.list$vsiga,gls.list$sesiga,am,nsf)
@@ -546,12 +593,13 @@ function(mdf,fixform = Ymat ~ 1,components=c("VarE(I)","VarG(Ia)"),specific.comp
 
       }  # end some specific factors
 
-    } # end if OK for gls
+    cat("DME substep completed:\n")
+    } # end if OK for fixedgls
 
     else if (!gls.list$ok) {
 #      outlist <- c(list(ols=ols.list))
        outlist <- ols.list
-       cat("GLS-b step abandoned:\n")
+       cat("GLS-fixed-effects step abandoned:\n")
     }
   }
   return(outlist)

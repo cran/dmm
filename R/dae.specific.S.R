@@ -1,5 +1,5 @@
 dae.specific.S <-
-function(zpre1,zpost1,zpre2,zpost2,zop,mmat,factorno,componentname,effnames,effcodes,effnandc,comcodes,varcodes,cnames,cnamesie,emat,vmat,icol,iecol,gls,ctable)
+function(zpre1,zpost1,zpre2,zpost2,zop,mmat,factorno,componentname,effnames,effcodes,effnandc,comcodes,varcodes,cnames,cnamesie,emat,vmat,icol,iecol,fixedgls,dmeopt,ctable)
 # dae.specific.S() - expectations for a specific component
 #               zpre, zpost are zi or zm or zc
 #               returns incremented icol which is next vacant col of W
@@ -25,7 +25,7 @@ function(zpre1,zpost1,zpre2,zpost2,zop,mmat,factorno,componentname,effnames,effc
           szpost2 <- zpost2[[effnandc[[factorno]][j]]]
           zaz <- eval(parse(text=paste("(szpre1 %*% t(szpost1))", zop, "(szpre2 %*% t(szpost2))"," + 0",sep="")))
           emat[,icol] <- as.vector(mmat %*% zaz %*% mmat) # one col of W matrix
-          if(gls) {
+          if(fixedgls | dmeopt == "fgls") {
             vmat[,icol] <- as.vector(zaz) # one col of V matrix
           }
           cnames[icol] <- specificcomponentname # name for this col
@@ -52,7 +52,7 @@ function(zpre1,zpost1,zpre2,zpost2,zop,mmat,factorno,componentname,effnames,effc
         szpost2 <- zpost2[[effnandc[[factorno]][j]]]
         zaz <- eval(parse(text=paste("(szpre1 %*% t(szpost1))", zop, "(szpre2 %*% t(szpost2))"," + 0",sep="")))
         emat[,icol] <- as.vector(mmat %*% zaz %*% mmat) # one col of W matrix
-        if(gls) {
+        if(fixedgls | dmeopt == "fgls") {
           vmat[,icol] <- as.vector(zaz) # one col of V matrix
         }
         cnames[icol] <- specificcomponentname # name for this col

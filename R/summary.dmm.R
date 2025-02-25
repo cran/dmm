@@ -1,5 +1,5 @@
 summary.dmm <-
-function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
+function(object,traitset="all",componentset="all",bytrait=T,fixedgls=F,digits=3, ...)
 # summary.dmm() - make summary tables for a dmm object
 {
   # check object is a dmm object fully populated
@@ -86,9 +86,9 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
        ctables[[count]] <- ctable
     }
   }
-  retobj <- list(btables=btables, ctables=ctables,traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+  retobj <- list(btables=btables, ctables=ctables,traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
 
-  if(gls) {
+  if(fixedgls) {
   if(bytrait) {
     gbtables <- vector("list",l)  # one table per trait
     count <- 0
@@ -146,7 +146,7 @@ function(object,traitset="all",componentset="all",bytrait=T,gls=F,digits=3, ...)
        gctables[[count]] <- ctable
     }
   }
-  retobj <- list(btables=btables,ctables=ctables,gbtables=gbtables,gctables=gctables,traits=traits, components=components, bytrait=bytrait, gls=gls, digits=digits)
+  retobj <- list(btables=btables,ctables=ctables,gbtables=gbtables,gctables=gctables,traits=traits, components=components, bytrait=bytrait, fixedgls=fixedgls, digits=digits)
   }
 
   retobj$call <- match.call()

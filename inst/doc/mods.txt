@@ -1,3 +1,9 @@
+dmm_3.1-1	Major release including the dmeopt="fgls"  option which allows REML
+                estimates of variance components.
+		Rewrite of manuals and help pages.
+		Additional manual documents dmmClassSpecific.pdf dmmSolveDME.pdf
+		and dyadicerrorcov.pdf
+
 dmm_2.1-10	Restore nadiv() as dependency. Restore mdf()
 
 dmm_2.1-9       Remove nadiv as dependency (temporary)
@@ -69,5 +75,3 @@ dmm_1.6-4	siga.posdef modified to set symmetric=T on calling eigen()
 dmm_1.7-1	traits pairwise (option dmmarray) and blockwise (option
                 dmmblockarray)
 
-dmm_2.1-1	sex and fixed-effect specific varoiance components
-                and genetic parameters

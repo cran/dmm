@@ -1,5 +1,5 @@
 dae.nonspecific <-
-function(zpre,rel,zpost,mmat,componentname,cnames,cnamesie,emat,vmat,icol,iecol,gls)
+function(zpre,rel,zpost,mmat,componentname,cnames,cnamesie,emat,vmat,icol,iecol,fixedgls,dmeopt)
 # dae.nonspecific() - expectations for a nonspecific component
 #             zpre,zposr are zi or zm or zc
 {
@@ -9,7 +9,7 @@ function(zpre,rel,zpost,mmat,componentname,cnames,cnamesie,emat,vmat,icol,iecol,
 #   zaz <- matrix(0,nrows(emat),nrows(emat)
     zaz <- nszpre %*% rel %*% t(nszpost)
     emat[,icol] <- as.vector(mmat %*% zaz %*% mmat) # one col of W matrix
-    if(gls) {
+    if(fixedgls  | dmeopt == "fgls") {
       vmat[,icol] <- as.vector(zaz) # one col of V matrix
     }
     cnames[icol] <- componentname # name for this col
